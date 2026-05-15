@@ -7,98 +7,100 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Colorful Theme Palette */
-            --primary-grad: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --accent-color: #00f2fe;
-            --gold: #ffd700;
-            --success: #00ff87;
-            --danger: #ff4b2b;
-            --text-light: #ffffff;
-            --bg-dark: #1a1a2e;
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            /* Professional Enterprise Palette */
+            --primary: #0f172a; /* Deep Slate */
+            --secondary: #1e293b;
+            --accent: #c9a84c; /* Royal Gold */
+            --bg-body: #f1f5f9;
+            --white: #ffffff;
+            --success: #10b981;
+            --danger: #ef4444;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Open Sans', sans-serif; background: #f0f2f5; color: #333; overflow-x: hidden; }
+        body { font-family: 'Open Sans', sans-serif; background: var(--bg-body); color: var(--primary); overflow-x: hidden; }
         
         /* --- NAVIGATION --- */
         header {
-            background: var(--primary-grad); 
+            background: var(--primary); 
             padding: 0 5%; height: 80px; display: flex;
             justify-content: space-between; align-items: center;
             position: fixed; width: 100%; top: 0; z-index: 1000;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border-bottom: 3px solid var(--accent);
         }
 
-        .portal-logo { font-family: Montserrat; font-weight: 800; color: var(--gold); cursor: pointer; font-size: 1.2rem; }
+        .portal-logo { font-family: Montserrat; font-weight: 800; color: var(--accent); cursor: pointer; font-size: 1.1rem; letter-spacing: 1.5px; text-transform: uppercase; }
+        .nav-links { display: flex; list-style: none; gap: 20px; }
+        .nav-links a { text-decoration: none; color: #f8fafc; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; transition: var(--transition); letter-spacing: 0.5px; }
+        .nav-links a:hover { color: var(--accent); }
 
-        .nav-links { display: flex; list-style: none; gap: 15px; }
-        .nav-links a { text-decoration: none; color: var(--text-light); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; }
-        .nav-links a:hover { color: var(--accent-color); }
-
-        /* --- PAGE ANIMATION --- */
-        .page { display: none; padding: 120px 5% 60px; min-height: 100vh; animation: slideIn 0.5s ease-out; }
+        /* --- LAYOUT & ANIMATION --- */
+        .page { display: none; padding: 120px 5% 60px; min-height: 100vh; animation: fadeIn 0.5s ease; }
         .page.active { display: block; }
-        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .section-header { text-align: center; margin-bottom: 30px; }
-        .section-header h2 { color: #444; text-transform: uppercase; letter-spacing: 2px; }
-        .section-header hr { width: 60px; height: 4px; background: var(--primary-grad); border: none; margin: 10px auto; border-radius: 2px; }
+        .section-header { text-align: center; margin-bottom: 50px; }
+        .section-header h2 { font-weight: 800; font-size: 2.2rem; color: var(--primary); text-transform: uppercase; }
+        .section-header hr { width: 50px; height: 5px; background: var(--accent); border: none; margin: 15px auto; }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
         
-        /* --- COLORFUL CARDS --- */
+        /* --- ENHANCED CARDS --- */
         .card { 
-            background: var(--primary-grad); 
-            color: white; padding: 30px; border-radius: 20px; 
-            border: none; position: relative; overflow: hidden;
-            box-shadow: 0 10px 20px rgba(118, 75, 162, 0.3);
+            background: var(--white); 
+            padding: 40px; border-radius: 4px; 
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+            transition: var(--transition);
+            border-bottom: 4px solid transparent;
         }
-        .card::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: rgba(255,255,255,0.1); transform: rotate(45deg); pointer-events: none; }
+        .card:hover { transform: translateY(-10px); border-bottom: 4px solid var(--accent); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .card h4 { color: var(--accent); margin-bottom: 15px; text-transform: uppercase; font-size: 0.9rem; }
 
-        /* --- TABLES --- */
-        .table-container { overflow-x: auto; background: white; border-radius: 15px; padding: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { background: var(--primary-grad); color: white; padding: 15px; text-align: left; }
-        td { padding: 12px; border-bottom: 1px solid #eee; }
-        .sub-badge { background: #eef2ff; color: #4f46e5; padding: 4px 10px; border-radius: 20px; font-weight: 700; font-size: 0.7rem; margin: 2px; display: inline-block; }
+        /* --- DATA TABLES --- */
+        .table-container { overflow-x: auto; background: var(--white); border-radius: 4px; border: 1px solid #e2e8f0; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: var(--secondary); color: var(--white); padding: 20px; text-align: left; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+        td { padding: 18px; border-bottom: 1px solid #e2e8f0; font-size: 0.95rem; }
+        .sub-badge { background: #f8fafc; color: var(--secondary); padding: 5px 12px; border-radius: 4px; font-weight: 700; font-size: 0.7rem; margin-right: 5px; border: 1px solid #cbd5e1; }
 
-        /* --- FORMS & BUTTONS --- */
-        .form-box { max-width: 600px; margin: 0 auto; background: white; padding: 35px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-        input, select { width: 100%; padding: 14px; margin: 10px 0; border: 2px solid #eee; border-radius: 10px; font-weight: 600; outline: none; transition: var(--transition); }
-        input:focus { border-color: #667eea; }
+        /* --- FORMS & ACTION BUTTONS --- */
+        .form-box { max-width: 600px; margin: 0 auto; background: var(--white); padding: 45px; border-radius: 4px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15); }
+        input, select { width: 100%; padding: 15px; margin: 15px 0; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.95rem; outline: none; background: #fcfcfc; }
+        input:focus { border-color: var(--accent); background: #fff; }
         
         .btn { 
-            background: var(--primary-grad); color: white; border: none; 
-            padding: 16px; width: 100%; font-weight: 800; border-radius: 10px; 
-            cursor: pointer; text-transform: uppercase; letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            background: var(--primary); color: var(--white); border: none; 
+            padding: 18px; width: 100%; font-weight: 800; border-radius: 4px; 
+            cursor: pointer; text-transform: uppercase; transition: var(--transition); letter-spacing: 1px;
         }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5); }
+        .btn:hover { background: var(--accent); color: var(--primary); }
 
-        .action-btn { padding: 8px 15px; border: none; border-radius: 8px; color: white; cursor: pointer; font-weight: 700; }
-        .accept { background: linear-gradient(to right, #00ff87, #60efff); color: #1a1a2e; }
-        .decline { background: linear-gradient(to right, #f550a1, #9b00e8); }
+        .action-btn { padding: 8px 14px; border: none; border-radius: 4px; color: white; cursor: pointer; font-weight: 700; font-size: 0.75rem; margin-right: 5px; text-transform: uppercase; }
+        .accept { background: var(--success); }
+        .decline { background: var(--secondary); }
+        .delete { background: var(--danger); }
 
-        footer { background: var(--bg-dark); color: white; padding: 40px; text-align: center; }
-        .admin-link { color: var(--accent-color); font-size: 0.8rem; cursor: pointer; text-decoration: underline; }
+        footer { background: var(--primary); color: #94a3b8; padding: 80px 5% 40px; text-align: center; border-top: 8px solid var(--accent); }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: left; margin-bottom: 40px; }
+        .admin-link { color: var(--accent); font-size: 0.75rem; cursor: pointer; text-decoration: none; margin-top: 20px; display: inline-block; font-weight: 800; }
 
-        @media (max-width: 768px) { .nav-links { display: none; } }
+        @media (max-width: 900px) { .nav-links { display: none; } }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="portal-logo" onclick="Router.navigate('home')">EDU-PORTAL 2026</div>
+        <div class="portal-logo" onclick="Router.navigate('home')">Higher Education Portal</div>
         <nav>
             <ul class="nav-links">
                 <li><a href="#" onclick="Router.navigate('home')">Home</a></li>
-                <li><a href="#" onclick="Router.navigate('programs')">Courses</a></li>
-                <li><a href="#" onclick="Router.navigate('eligibility')">Eligibility</a></li>
-                <li><a href="#" onclick="Router.navigate('fee')">Fee</a></li>
-                <li><a href="#" onclick="Router.navigate('campus')">Campus</a></li>
-                <li><a href="#" onclick="Router.navigate('contact')">Contact</a></li>
-                <li><a href="#" onclick="Router.navigate('apply')" style="color:var(--gold)">Apply Now</a></li>
+                <li><a href="#" onclick="Router.navigate('programs')">Academic Programs</a></li>
+                <li><a href="#" onclick="Router.navigate('eligibility')">Eligibility Check</a></li>
+                <li><a href="#" onclick="Router.navigate('fee')">Fee Structure</a></li>
+                <li><a href="#" onclick="Router.navigate('campus')">Student Life</a></li>
+                <li><a href="#" onclick="Router.navigate('contact')">Location</a></li>
+                <li><a href="#" onclick="Router.navigate('apply')" style="color:var(--accent)">Register Now</a></li>
             </ul>
         </nav>
     </header>
@@ -106,123 +108,166 @@
     <main id="home" class="page active">
         <div class="grid" style="align-items: center;">
             <div>
-                <h1 style="font-size: 3.5rem; background: var(--primary-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Future-Ready <br>Education.</h1>
-                <p style="margin: 20px 0; font-size: 1.1rem;">Official Admission Portal for the 2026 Academic Session.</p>
-                <button class="btn" style="width:auto; padding:15px 40px;" onclick="Router.navigate('eligibility')">Check Eligibility</button>
+                <h1 style="font-size: 3.5rem; line-height: 1.1; margin-bottom: 20px;">Shaping the <br><span style="color:var(--accent)">Leaders of Tomorrow.</span></h1>
+                <p style="margin-bottom: 35px; font-size: 1.1rem; color: #475569; line-height: 1.8;">Welcome to the centralized enrollment gateway for the 2026 intake. Our institution blends academic rigor with digital innovation to provide a world-class educational experience.</p>
+                <div style="display: flex; gap: 15px;">
+                    <button class="btn" style="width:auto; padding:18px 40px;" onclick="Router.navigate('apply')">Get Started</button>
+                    <button class="btn" style="width:auto; padding:18px 40px; background: #e2e8f0; color: #1e293b;" onclick="Router.navigate('programs')">Explore Courses</button>
+                </div>
             </div>
             <div class="card">
-                <span style="font-size: 4rem;">🚀</span>
-                <h3 style="margin: 15px 0;">Principal Message</h3>
-                <p style="font-style: italic; opacity: 0.9;">"Our software-driven campus ensures every student has the tools to innovate and lead in the digital era."</p>
+                <h4>Institutional Excellence</h4>
+                <h3 style="margin-bottom: 20px; font-size: 1.5rem;">Principal's Address</h3>
+                <p style="font-style: italic; color: #475569; line-height: 1.8; font-size: 1rem;">"In an era of rapid technological advancement, we empower our students with the critical thinking and digital fluency required to excel in the global landscape."</p>
             </div>
         </div>
     </main>
 
     <section id="programs" class="page">
-        <div class="section-header"><h2>Academic Programs</h2><hr></div>
+        <div class="section-header"><h2>Academic Departments</h2><hr></div>
         <div class="table-container">
             <table>
-                <thead><tr><th>Faculty</th><th>Core Subjects</th></tr></thead>
+                <thead><tr><th>Faculty</th><th>Description</th><th>Major Subjects</th></tr></thead>
                 <tbody>
-                    <tr><td><b>FSc Pre-Medical</b></td><td><span class="sub-badge">Physics</span><span class="sub-badge">Chemistry</span><span class="sub-badge">Biology</span></td></tr>
-                    <tr><td><b>ICS Computer Science</b></td><td><span class="sub-badge">Computer</span><span class="sub-badge">Math</span><span class="sub-badge">Physics</span></td></tr>
-                    <tr><td><b>Humanities / Arts</b></td><td><span class="sub-badge">Civics</span><span class="sub-badge">Economics</span><span class="sub-badge">Edu</span></td></tr>
+                    <tr><td><b>FSc Pre-Medical</b></td><td>Focused on clinical research and biological sciences.</td><td><span class="sub-badge">Physics</span><span class="sub-badge">Chemistry</span><span class="sub-badge">Biology</span></td></tr>
+                    <tr><td><b>FSc Pre-Engineering</b></td><td>A rigorous track for future architects and engineers.</td><td><span class="sub-badge">Physics</span><span class="sub-badge">Chemistry</span><span class="sub-badge">Mathematics</span></td></tr>
+                    <tr><td><b>ICS Computer Science</b></td><td>Software Engineering and AI-focused curriculum.</td><td><span class="sub-badge">Computing</span><span class="sub-badge">Math</span><span class="sub-badge">Physics</span></td></tr>
+                    <tr><td><b>FA / I.Com</b></td><td>Business, Commerce, and Humanities management.</td><td><span class="sub-badge">Accounting</span><span class="sub-badge">Economics</span><span class="sub-badge">Civics</span></td></tr>
                 </tbody>
             </table>
         </div>
     </section>
 
     <section id="eligibility" class="page">
-        <div class="section-header"><h2>Eligibility Checker</h2><hr></div>
+        <div class="section-header"><h2>Validation Engine</h2><hr></div>
         <div class="form-box">
-            <label>Choose Program</label>
-            <select id="crit"><option value="65">Science (65%)</option><option value="50">Arts (50%)</option></select>
-            <label>Matric Percentage</label>
-            <input type="number" id="perc" placeholder="e.g. 75">
-            <button class="btn" onclick="Logic.check()">Run Validator</button>
-            <div id="out" style="margin-top:20px; text-align:center; font-weight:800; font-size:1.2rem;"></div>
+            <h4 style="color: var(--accent); margin-bottom: 20px; text-align: center;">Verify Your Academic Standing</h4>
+            <label>Select Your Desired Track</label>
+            <select id="crit"><option value="65">Science & Technology (65%)</option><option value="50">Humanities & Commerce (50%)</option></select>
+            <label>Enter Matriculation Score (%)</label>
+            <input type="number" id="perc" placeholder="e.g. 78">
+            <button class="btn" onclick="Logic.check()">Analyze Eligibility</button>
+            <div id="out" style="margin-top:25px; text-align:center; font-weight:800; font-size:1.2rem;"></div>
         </div>
     </section>
 
     <section id="fee" class="page">
-        <div class="section-header"><h2>Fee Structure</h2><hr></div>
+        <div class="section-header"><h2>Investment in Future</h2><hr></div>
         <div class="table-container">
             <table>
-                <thead><tr><th>Program</th><th>One-Time Fee</th><th>Monthly</th></tr></thead>
+                <thead><tr><th>Program Category</th><th>Duration</th><th>Financial Details</th></tr></thead>
                 <tbody>
-                    <tr><td>All Science Programs</td><td>Contact Office</td><td>Contact Office</td></tr>
-                    <tr><td>Humanities</td><td>Contact Office</td><td>Contact Office</td></tr>
+                    <tr><td>Science & IT Tracks</td><td>2 Years</td><td>Consult Admissions Office</td></tr>
+                    <tr><td>Commerce & Arts</td><td>2 Years</td><td>Consult Admissions Office</td></tr>
                 </tbody>
             </table>
+            <p style="padding: 20px; text-align: center; color: #64748b; font-weight: 600;">* Merit-based scholarships awarded to students with 900+ marks.</p>
         </div>
     </section>
 
     <section id="campus" class="page">
-        <div class="section-header"><h2>Campus Facilities</h2><hr></div>
+        <div class="section-header"><h2>The Student Experience</h2><hr></div>
         <div class="grid">
-            <div class="card" style="background: linear-gradient(135deg, #2af598 0%, #009efd 100%);"><h4>Digital Labs</h4><p>24/7 Access to high-speed coding environments.</p></div>
-            <div class="card" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); color: #444;"><h4>Library</h4><p>Vast collection of digital and physical resources.</p></div>
-            <div class="card" style="background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);"><h4>Transport</h4><p>Luxury bus service covering Lahore routes.</p></div>
+            <div class="card">
+                <h4>Infrastructure</h4>
+                <h3>Advanced Labs</h3>
+                <p style="margin-top: 15px; line-height: 1.6;">Our STEM laboratories are equipped with industry-standard hardware for practical experimentation.</p>
+            </div>
+            <div class="card">
+                <h4>Resources</h4>
+                <h3>Digital Library</h3>
+                <p style="margin-top: 15px; line-height: 1.6;">24/7 access to global research databases, journals, and a vast collection of academic textbooks.</p>
+            </div>
+            <div class="card">
+                <h4>Safety</h4>
+                <h3>Secure Transit</h3>
+                <p style="margin-top: 15px; line-height: 1.6;">Dedicated transport network ensuring safe and timely commutes from Depalpur and Lahore routes.</p>
+            </div>
         </div>
     </section>
 
     <section id="contact" class="page">
-        <div class="section-header"><h2>Contact & Map</h2><hr></div>
+        <div class="section-header"><h2>Global Headquarters</h2><hr></div>
         <div class="grid">
-            <div class="card" style="background: #232526;">
-                <p>📍 <strong>Location:</strong> Lahore, Pakistan</p>
-                <p>📞 <strong>Helpline:</strong> 03123456789</p>
-                <p>🛰️ <strong>GPS:</strong> 31.390451, 74.241752</p>
+            <div class="card" style="background: var(--primary); color: white;">
+                <h4>Location Details</h4>
+                <p style="margin: 20px 0;">📍 Lahore, Pakistan</p>
+                <p style="margin: 20px 0;">📞 Helpline: +92 312 3456789</p>
+                <p style="margin: 20px 0;">🌐 GPS: 31.390451, 74.241752</p>
+                <p style="margin-top: 20px; font-size: 0.8rem; opacity: 0.6;">Visit us Monday to Saturday (8 AM - 4 PM)</p>
             </div>
-            <iframe style="width:100%; height:300px; border-radius:20px; border:none;" src="http://googleusercontent.com/maps.google.com/5"></iframe>
+            <iframe style="width:100%; height:350px; border-radius:4px; border:none; box-shadow: 0 10px 15px rgba(0,0,0,0.1);" src="http://googleusercontent.com/maps.google.com/9"></iframe>
         </div>
     </section>
 
     <section id="apply" class="page">
         <div class="form-box" id="step1">
-            <h3>Student ID Setup</h3>
-            <input type="text" id="nameIn" placeholder="Full Name">
-            <input type="email" id="mailIn" placeholder="Email Address">
-            <button class="btn" onclick="Admin.register()">Register & Proceed</button>
+            <h3 style="text-align: center; margin-bottom: 10px;">New Student Intake 2026</h3>
+            <p style="text-align: center; font-size: 0.85rem; color: #64748b; margin-bottom: 30px;">Step 1: Secure Identity Verification</p>
+            <input type="text" id="nameIn" placeholder="Full Name (As per Matric Result)">
+            <input type="email" id="mailIn" placeholder="Primary Email Address">
+            <button class="btn" onclick="Admin.register()">Register & Access Form</button>
         </div>
         <div id="step2" style="display:none; margin-top:20px;">
-            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSe4g1J0BZhNLYRf93zCHlfhuOfaucwa9HhJlmwTqvtur1VGTg/viewform?embedded=true" width="100%" height="900" frameborder="0">Loading...</iframe>
+            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSe4g1J0BZhNLYRf93zCHlfhuOfaucwa9HhJlmwTqvtur1VGTg/viewform?embedded=true" width="100%" height="900" frameborder="0">Loading Official Application Form...</iframe>
         </div>
     </section>
 
     <section id="login" class="page">
         <div class="form-box">
-            <h2 style="text-align:center;">Security Vault</h2>
-            <input type="password" id="passIn" placeholder="Admin PIN">
-            <button class="btn" onclick="Admin.login()">Access Dashboard</button>
+            <h2 style="text-align:center;">Secure Gateway</h2>
+            <p style="text-align: center; color: #64748b; margin-bottom: 30px;">Administrative Access Only</p>
+            <input type="password" id="passIn" placeholder="Authorized Personnel PIN">
+            <button class="btn" onclick="Admin.login()">Authorize Session</button>
         </div>
     </section>
 
     <section id="dash" class="page">
-        <div class="section-header"><h2>Admission Control</h2><hr></div>
+        <div class="section-header"><h2>Student Management System</h2><hr></div>
         <div class="table-container">
             <table>
-                <thead><tr><th>Name</th><th>Email</th><th>Status</th><th>Actions</th></tr></thead>
+                <thead><tr><th>Student Record</th><th>Contact Link</th><th>Admission Status</th><th>Governance Actions</th></tr></thead>
                 <tbody id="dashBody"></tbody>
             </table>
         </div>
-        <div style="margin-top:20px; display:flex; gap:10px;">
-            <button class="btn" style="background:var(--gold); color:black;" onclick="Admin.exportExcel()">Export CSV</button>
-            <button class="btn" style="background:#444;" onclick="Router.navigate('home')">Logout</button>
+        <div style="margin-top:30px; display:flex; gap:15px;">
+            <button class="btn" style="background:var(--accent); color:var(--primary);" onclick="Admin.exportExcel()">Generate CSV Report</button>
+            <button class="btn" style="background:var(--secondary);" onclick="Router.navigate('home')">Terminate Session</button>
         </div>
     </section>
 
     <footer>
-        <p>© 2026 Digital Admission System</p>
-        <span class="admin-link" onclick="Router.navigate('login')">Admin Management</span>
+        <div class="footer-grid">
+            <div>
+                <h4 style="color:var(--accent); margin-bottom:20px;">About the Portal</h4>
+                <p style="font-size:0.85rem; line-height:1.8;">The centralized digital admission gateway is designed for the Spring 2026 intake, ensuring a seamless bridge between applicants and institutional governance.</p>
+            </div>
+            <div>
+                <h4 style="color:var(--accent); margin-bottom:20px;">Quick Links</h4>
+                <p style="margin-bottom:10px; font-size:0.85rem;"><a href="#" onclick="Router.navigate('programs')" style="color:inherit; text-decoration:none;">Academics</a></p>
+                <p style="margin-bottom:10px; font-size:0.85rem;"><a href="#" onclick="Router.navigate('eligibility')" style="color:inherit; text-decoration:none;">Eligibility</a></p>
+                <p style="margin-bottom:10px; font-size:0.85rem;"><a href="#" onclick="Router.navigate('fee')" style="color:inherit; text-decoration:none;">Financials</a></p>
+            </div>
+            <div>
+                <h4 style="color:var(--accent); margin-bottom:20px;">Campus Support</h4>
+                <p style="font-size:0.85rem;">📞 +92 312 3456789</p>
+                <p style="font-size:0.85rem; margin-top:10px;">📧 admissions@eduportal.com</p>
+            </div>
+        </div>
+        <hr style="opacity: 0.1; margin-bottom: 30px;">
+        <p>© 2026 Academic Admission System. All Rights Reserved.</p>
+        <span class="admin-link" onclick="Router.navigate('login')">Administrative Portal Access</span>
     </footer>
 
     <script>
+        const DB_URL = "https://online-portal-for-uni-project-default-rtdb.firebaseio.com/admissions.json";
+
         const Router = {
             navigate: function(id) {
                 document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
                 document.getElementById(id).classList.add('active');
                 window.scrollTo(0,0);
+                if(id === 'dash') Admin.fetchData();
             }
         };
 
@@ -231,66 +276,89 @@
                 const m = document.getElementById('perc').value;
                 const c = document.getElementById('crit').value;
                 const o = document.getElementById('out');
-                if(m >= c) { o.innerHTML = "ELIGIBLE ✅"; o.style.color = "var(--success)"; }
-                else { o.innerHTML = "NOT ELIGIBLE ❌"; o.style.color = "var(--danger)"; }
+                if(m >= c) { o.innerHTML = "STATUS: ELIGIBLE ✅"; o.style.color = "var(--success)"; }
+                else { o.innerHTML = "STATUS: NOT ELIGIBLE ❌"; o.style.color = "var(--danger)"; }
             }
         };
 
         const Admin = {
             key: "22334455",
-            data: [],
+            localData: [],
 
             login: function() {
                 if(document.getElementById('passIn').value === this.key) Router.navigate('dash');
-                else alert("Access Denied!");
+                else alert("Authentication Error: Invalid Credentials.");
             },
 
-            register: function() {
+            register: async function() {
                 const n = document.getElementById('nameIn').value;
                 const e = document.getElementById('mailIn').value;
-                if(!n || !e) return alert("Required!");
-                this.data.push({n, e, status: "Pending"});
-                this.sync();
-                document.getElementById('step1').style.display = "none";
-                document.getElementById('step2').style.display = "block";
+                if(!n || !e) return alert("Validation Error: Please provide full details.");
+                const student = { n, e, status: "Pending", date: new Date().toLocaleDateString() };
+                try {
+                    await fetch(DB_URL, { method: 'POST', body: JSON.stringify(student) });
+                    document.getElementById('step1').style.display = "none";
+                    document.getElementById('step2').style.display = "block";
+                } catch(err) { alert("Connectivity Error: Database Offline."); }
+            },
+
+            fetchData: async function() {
+                try {
+                    const res = await fetch(DB_URL);
+                    const data = await res.json();
+                    this.localData = [];
+                    if(data) { for(let id in data) this.localData.push({ id, ...data[id] }); }
+                    this.sync();
+                } catch(err) { console.log(err); }
             },
 
             sync: function() {
                 const b = document.getElementById('dashBody');
-                b.innerHTML = this.data.map((s, i) => `
+                b.innerHTML = this.localData.map((s, i) => `
                     <tr>
-                        <td>${s.n}</td>
+                        <td><b>${s.n}</b><br><small>${s.date || 'Session 2026'}</small></td>
                         <td>${s.e}</td>
-                        <td style="color:${s.status==='Accepted'?'var(--success)':'#ff4b2b'}; font-weight:800;">${s.status}</td>
+                        <td style="color:${s.status==='Accepted'?'var(--success)':(s.status==='Rejected'?'var(--danger)':'#64748b')}; font-weight:800;">${s.status}</td>
                         <td>
-                            <button class="action-btn accept" onclick="Admin.action(${i}, 'Accepted')">Accept</button>
-                            <button class="action-btn decline" onclick="Admin.action(${i}, 'Rejected')">Reject</button>
+                            <button class="action-btn accept" onclick="Admin.action('${s.id}', ${i}, 'Accepted')">Accept</button>
+                            <button class="action-btn decline" onclick="Admin.action('${s.id}', ${i}, 'Rejected')">Reject</button>
+                            <button class="action-btn delete" onclick="Admin.deleteRecord('${s.id}')">Delete</button>
                         </td>
                     </tr>
                 `).join('');
             },
 
-            action: function(i, res) {
-                const s = this.data[i];
-                s.status = res;
-                this.sync();
-                const sub = res === 'Accepted' ? "Admission Success" : "Admission Update";
-                const body = res === 'Accepted' ? `Dear ${s.n}, Congrats! You are accepted.` : `Dear ${s.n}, We regret to inform you...`;
-                
-                const type = confirm("OK for Gmail, Cancel for Outlook");
-                const url = type 
-                    ? `https://mail.google.com/mail/?view=cm&fs=1&to=${s.e}&su=${encodeURIComponent(sub)}&body=${encodeURIComponent(body)}`
-                    : `https://outlook.office.com/mail/deeplink/compose?to=${s.e}&subject=${encodeURIComponent(sub)}&body=${encodeURIComponent(body)}`;
-                window.open(url, '_blank');
+            action: async function(id, index, status) {
+                const student = this.localData[index];
+                try {
+                    const updateURL = `https://online-portal-for-uni-project-default-rtdb.firebaseio.com/admissions/${id}.json`;
+                    await fetch(updateURL, { method: 'PATCH', body: JSON.stringify({ status: status }) });
+                    student.status = status;
+                    this.sync();
+                    const sub = status === 'Accepted' ? "Admission Confirmation 2026" : "Admission Update 2026";
+                    const body = status === 'Accepted' ? `Dear ${student.n}, Your application has been approved. Welcome to the institution.` : `Dear ${student.n}, We regret to inform you that your application was unsuccessful.`;
+                    const choice = confirm("OK for Gmail Web, Cancel for Outlook Web");
+                    const url = choice 
+                        ? `https://mail.google.com/mail/?view=cm&fs=1&to=${student.e}&su=${encodeURIComponent(sub)}&body=${encodeURIComponent(body)}`
+                        : `https://outlook.office.com/mail/deeplink/compose?to=${student.e}&subject=${encodeURIComponent(sub)}&body=${encodeURIComponent(body)}`;
+                    window.open(url, '_blank');
+                } catch(err) { alert("Update Error: Failed to synchronize status."); }
+            },
+
+            deleteRecord: async function(id) {
+                if(!confirm("Security Warning: Are you sure you want to permanently erase this student record?")) return;
+                try {
+                    const deleteURL = `https://online-portal-for-uni-project-default-rtdb.firebaseio.com/admissions/${id}.json`;
+                    await fetch(deleteURL, { method: 'DELETE' });
+                    this.fetchData();
+                } catch(err) { alert("Delete Error: Record remains in database."); }
             },
 
             exportExcel: function() {
-                let csv = "Name,Email,Status\n" + this.data.map(s => `${s.n},${s.e},${s.status}`).join("\n");
+                let csv = "Full Name,Email Address,Admission Status\n" + this.localData.map(s => `${s.n},${s.e},${s.status}`).join("\n");
                 const blob = new Blob([csv], { type: 'text/csv' });
                 const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url; a.download = 'Admissions_2026.csv';
-                a.click();
+                const a = document.createElement('a'); a.href = url; a.download = 'Master_Admission_Registry_2026.csv'; a.click();
             }
         };
     </script>
