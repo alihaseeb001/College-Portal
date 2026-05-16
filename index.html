@@ -176,7 +176,7 @@
                 <h1 style="font-size: 3.5rem; line-height: 1.1; margin-bottom: 20px;">Shaping the <br><span style="color:var(--accent)">Leaders of Tomorrow.</span></h1>
                 <p style="margin-bottom: 35px; font-size: 1.1rem; color: #475569; line-height: 1.8;">Welcome to the centralized enrollment gateway for the 2026 intake. Our institution blends academic rigor with digital innovation to provide a world-class educational experience.</p>
                 <div style="display: flex; gap: 15px;">
-                    <button class="btn" style="width:auto; padding:18px 40px;" onclick="Router.navigate('studentsignup')">Get Started</button>
+
                     <button class="btn" style="width:auto; padding:18px 40px; background: #e2e8f0; color: #1e293b;" onclick="Router.navigate('programs')">Explore Courses</button>
                 </div>
             </div>
@@ -272,6 +272,7 @@
             <input type="text" id="regName" placeholder="Full Name">
             <input type="email" id="regEmail" placeholder="Email Address">
             <input type="password" id="regPass" placeholder="Choose Password">
+            <input type="password" id="regConfirmPass" placeholder="Confirm Password">
             <button class="btn" onclick="Auth.signup()">Sign Up</button>
             <p style="text-align: center; margin-top: 20px; font-size: 0.9rem; color: #475569;">Already have an account? <a href="#" onclick="Router.navigate('studentlogin')" style="color: var(--accent); font-weight: 700; text-decoration: none;">Log In Here</a></p>
         </div>
@@ -280,11 +281,33 @@
     <section id="studentlogin" class="page">
         <div class="form-box">
             <h2 style="text-align:center;">Student Gateway</h2>
-            <p style="text-align: center; color: #64748b; margin-bottom: 30px;">Log in to access the application form</p>
+            <p style="text-align: center; color: #64748b; margin-bottom: 20px;">Log in to access the application form</p>
             <input type="email" id="logEmail" placeholder="Email Address">
             <input type="password" id="logPass" placeholder="Password">
             <button class="btn" onclick="Auth.login()">Log In</button>
-            <p style="text-align: center; margin-top: 20px; font-size: 0.9rem; color: #475569;">New applicant? <a href="#" onclick="Router.navigate('studentsignup')" style="color: var(--accent); font-weight: 700; text-decoration: none;">Create Account</a></p>
+            <p style="text-align: center; margin-top: 20px; font-size: 0.9rem; color: #475569;"><a href="#" onclick="Router.navigate('forgotpassword')" style="color: var(--danger); text-decoration: none; font-weight: 600;">Forgot Password?</a></p>
+            <p style="text-align: center; margin-top: 15px; font-size: 0.9rem; color: #475569;">New applicant? <a href="#" onclick="Router.navigate('studentsignup')" style="color: var(--accent); font-weight: 700; text-decoration: none;">Create Account</a></p>
+        </div>
+    </section>
+
+    <section id="forgotpassword" class="page">
+        <div class="form-box">
+            <h2 style="text-align:center;">Reset Password Gateway</h2>
+            <p style="text-align: center; color: #64748b; margin-bottom: 25px;">Verify security fields to modify credentials</p>
+            
+            <div id="forgotVerificationBlock">
+                <input type="email" id="forgotEmail" placeholder="Registered Email Address">
+                <input type="text" id="forgotName" placeholder="Account Full Name">
+                <button class="btn" onclick="Auth.verifyForgotPasswordIdentity()">Verify Identity</button>
+            </div>
+
+            <div id="forgotResetInputBlock" style="display:none;">
+                <label style="margin-bottom:5px; display:block; color:var(--success);">Identity Matched! Set New Password Below:</label>
+                <input type="password" id="forgotNewPass" placeholder="Choose New Password">
+                <button class="btn" style="background:var(--success);" onclick="Auth.executePasswordOverrideUpdate()">Update Password</button>
+            </div>
+
+            <p style="text-align: center; margin-top: 25px; font-size: 0.9rem; color: #475569;">Remembered credentials? <a href="#" onclick="Router.navigate('studentlogin')" style="color: var(--accent); font-weight: 700; text-decoration: none;">Back to Login</a></p>
         </div>
     </section>
 
@@ -476,6 +499,16 @@
                 document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
                 document.getElementById(id).classList.add('active');
                 window.scrollTo(0,0);
+                
+                if(id === 'forgotpassword') {
+                    document.getElementById('forgotEmail').value = "";
+                    document.getElementById('forgotName').value = "";
+                    document.getElementById('forgotNewPass').value = "";
+                    document.getElementById('forgotVerificationBlock').style.display = "block";
+                    document.getElementById('forgotResetInputBlock').style.display = "none";
+                    Auth.forgotValidatedUserId = null;
+                }
+                
                 if(id === 'dash') Admin.fetchData();
             }
         };
@@ -492,13 +525,16 @@
 
         const Auth = {
             currentApplicantRecordId: null,
+            forgotValidatedUserId: null,
 
             signup: async function() {
                 const name = document.getElementById('regName').value.trim();
                 const email = document.getElementById('regEmail').value.trim();
                 const password = document.getElementById('regPass').value.trim();
+                const confirmPassword = document.getElementById('regConfirmPass').value.trim();
 
-                if(!name || !email || !password) return alert("Validation Error: All fields are required.");
+                if(!name || !email || !password || !confirmPassword) return alert("Validation Error: All fields are required.");
+                if(password !== confirmPassword) return alert("Validation Error: Passwords do not match. Please verify.");
 
                 try {
                     const res = await fetch(AUTH_URL);
@@ -514,6 +550,12 @@
                     const userPayload = { name, email: email.toLowerCase(), password };
                     await fetch(AUTH_URL, { method: 'POST', body: JSON.stringify(userPayload) });
                     alert("Account created successfully! Please log in.");
+                    
+                    document.getElementById('regName').value = "";
+                    document.getElementById('regEmail').value = "";
+                    document.getElementById('regPass').value = "";
+                    document.getElementById('regConfirmPass').value = "";
+                    
                     Router.navigate('studentlogin');
                 } catch(err) { alert("Connectivity Error: Authentication server offline."); }
             },
@@ -542,7 +584,6 @@
                         document.getElementById('formName').value = matchedUser.name;
                         document.getElementById('formEmail').value = matchedUser.email;
                         
-                        // Default UI States Configuration
                         document.getElementById('registrationInputsBlock').style.display = "block";
                         document.getElementById('registerSubmitBtn').style.display = "block";
                         document.getElementById('registerSubmitBtn').disabled = false;
@@ -585,6 +626,51 @@
                         alert("Authentication Error: Invalid email or password.");
                     }
                 } catch(err) { alert("Connectivity Error: Unable to verify credentials."); }
+            },
+
+            verifyForgotPasswordIdentity: async function() {
+                const email = document.getElementById('forgotEmail').value.trim().toLowerCase();
+                const name = document.getElementById('forgotName').value.trim().toLowerCase();
+
+                if(!email || !name) return alert("Validation Error: Please match both fields to proceed.");
+
+                try {
+                    const res = await fetch(AUTH_URL);
+                    const users = await res.json();
+                    let matchedId = null;
+
+                    if(users) {
+                        for(let id in users) {
+                            if(users[id] && users[id].email && users[id].name && 
+                               users[id].email.trim().toLowerCase() === email && 
+                               users[id].name.trim().toLowerCase() === name) {
+                                matchedId = id;
+                                break;
+                            }
+                        }
+                    }
+
+                    if(matchedId) {
+                        Auth.forgotValidatedUserId = matchedId;
+                        document.getElementById('forgotVerificationBlock').style.display = "none";
+                        document.getElementById('forgotResetInputBlock').style.display = "block";
+                    } else {
+                        alert("Verification Error: No account matches these provided tracking elements.");
+                    }
+                } catch(err) { alert("Connectivity Error: Server offline."); }
+            },
+
+            executePasswordOverrideUpdate: async function() {
+                const newPass = document.getElementById('forgotNewPass').value.trim();
+                if(!newPass) return alert("Validation Error: Password string field cannot be blank.");
+                if(!Auth.forgotValidatedUserId) return alert("Security Error: Identity session expired.");
+
+                try {
+                    const patchURL = `https://online-portal-for-uni-project-default-rtdb.firebaseio.com/users/${Auth.forgotValidatedUserId}.json`;
+                    await fetch(patchURL, { method: 'PATCH', body: JSON.stringify({ password: newPass }) });
+                    alert("Security update complete! Password updated successfully.");
+                    Router.navigate('studentlogin');
+                } catch(err) { alert("Connectivity Error: Failed to write update to database."); }
             },
 
             calculateRealtimeAcademicMetrics: function() {
@@ -734,7 +820,6 @@
                     this.localData = [];
                     if(data) { for(let id in data) this.localData.push({ id, ...data[id] }); }
                     
-                    // Reset global checkbox state upon reload
                     const masterBox = document.getElementById('selectAllCheckbox');
                     if(masterBox) masterBox.checked = false;
 
