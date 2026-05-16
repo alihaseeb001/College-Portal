@@ -31,9 +31,27 @@
         }
 
         .portal-logo { font-family: Montserrat; font-weight: 800; color: var(--accent); cursor: pointer; font-size: 1.1rem; letter-spacing: 1.5px; text-transform: uppercase; }
-        .nav-links { display: flex; list-style: none; gap: 20px; }
+        .nav-links { display: flex; list-style: none; gap: 20px; align-items: center; }
         .nav-links a { text-decoration: none; color: #f8fafc; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; transition: var(--transition); letter-spacing: 0.5px; }
         .nav-links a:hover { color: var(--accent); }
+
+        /* Mobile Menu Toggle Button Styles */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 5px;
+        }
+        .menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: var(--accent);
+            transition: var(--transition);
+        }
 
         /* --- LAYOUT & ANIMATION --- */
         .page { display: none; padding: 120px 5% 60px; min-height: 100vh; animation: fadeIn 0.5s ease; }
@@ -62,13 +80,16 @@
         table { width: 100%; border-collapse: collapse; }
         th { background: var(--secondary); color: var(--white); padding: 20px; text-align: left; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
         td { padding: 18px; border-bottom: 1px solid #e2e8f0; font-size: 0.95rem; }
-        .sub-badge { background: #f8fafc; color: var(--secondary); padding: 5px 12px; border-radius: 4px; font-weight: 700; font-size: 0.7rem; margin-right: 5px; border: 1px solid #cbd5e1; }
+        .sub-badge { background: #f8fafc; color: var(--secondary); padding: 5px 12px; border-radius: 4px; font-weight: 700; font-size: 0.7rem; margin-right: 5px; border: 1px solid #cbd5e1; display: inline-block; margin-top: 5px; }
 
         /* --- FORMS & ACTION BUTTONS --- */
         .form-box { max-width: 600px; margin: 0 auto; background: var(--white); padding: 45px; border-radius: 4px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15); }
-        input, select { width: 100%; padding: 15px; margin: 15px 0; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.95rem; outline: none; background: #fcfcfc; }
-        input:focus { border-color: var(--accent); background: #fff; }
+        input, select, textarea { width: 100%; padding: 15px; margin: 15px 0; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.95rem; outline: none; background: #fcfcfc; font-family: inherit; }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent); background: #fff; }
+        label { font-weight: 700; font-size: 0.85rem; text-transform: uppercase; color: var(--secondary); letter-spacing: 0.5px; margin-top: 15px; display: block; }
         
+        .form-heading-sub { color: var(--accent); font-weight: 800; font-size: 1rem; border-bottom: 2px solid #cbd5e1; padding-bottom: 5px; margin-top: 30px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
+
         .btn { 
             background: var(--primary); color: var(--white); border: none; 
             padding: 18px; width: 100%; font-weight: 800; border-radius: 4px; 
@@ -76,7 +97,7 @@
         }
         .btn:hover { background: var(--accent); color: var(--primary); }
 
-        .action-btn { padding: 8px 14px; border: none; border-radius: 4px; color: white; cursor: pointer; font-weight: 700; font-size: 0.75rem; margin-right: 5px; text-transform: uppercase; }
+        .action-btn { padding: 8px 14px; border: none; border-radius: 4px; color: white; cursor: pointer; font-weight: 700; font-size: 0.75rem; margin-right: 5px; text-transform: uppercase; margin-top: 5px; }
         .accept { background: var(--success); }
         .decline { background: var(--secondary); }
         .delete { background: var(--danger); }
@@ -85,22 +106,66 @@
         .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: left; margin-bottom: 40px; }
         .admin-link { color: var(--accent); font-size: 0.75rem; cursor: pointer; text-decoration: none; margin-top: 20px; display: inline-block; font-weight: 800; }
 
-        @media (max-width: 900px) { .nav-links { display: none; } }
+        /* --- ADMIN MODAL BACKDROP AND BOX STYLES --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(4px); z-index: 2000; display: none; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
+        .modal-card { background: var(--white); width: 100%; max-width: 800px; max-height: 90vh; border-radius: 4px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); overflow-y: auto; padding: 40px; border-top: 6px solid var(--accent); animation: modalIn 0.3s ease; }
+        @keyframes modalIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .modal-close-btn { background: var(--primary); color: #fff; padding: 12px 25px; border: none; border-radius: 4px; font-weight: 700; text-transform: uppercase; cursor: pointer; transition: var(--transition); margin-top: 20px; float: right; }
+        .modal-close-btn:hover { background: var(--accent); color: var(--primary); }
+        .doc-preview-link { display: inline-block; background: var(--secondary); color: var(--white); padding: 8px 12px; margin: 5px; border-radius: 4px; text-decoration: none; font-size: 0.8rem; font-weight: 700; transition: var(--transition); border: none; cursor: pointer; }
+        .doc-preview-link:hover { background: var(--accent); color: var(--primary); }
+
+        /* --- MOBILE MEDIA QUERIES --- */
+        @media (max-width: 900px) {
+            .menu-toggle { display: flex; }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                background: var(--primary);
+                padding: 20px;
+                box-shadow: 0 10px 15px rgba(0,0,0,0.2);
+                border-bottom: 2px solid var(--accent);
+                gap: 15px;
+            }
+            .nav-links.mobile-active { display: flex; }
+            .nav-links li { width: 100%; text-align: center; }
+            .nav-links a { display: block; padding: 10px 0; font-size: 0.9rem; }
+            
+            main#home h1 { font-size: 2.5rem !important; }
+            main#home .grid { grid-template-columns: 1fr; }
+            .form-box { padding: 25px; }
+            .page { padding: 100px 4% 40px; }
+            .section-header h2 { font-size: 1.8rem; }
+            th, td { padding: 12px 10px; font-size: 0.85rem; }
+            
+            #dash div[style*="display:flex"] { flex-direction: column; gap: 10px !important; }
+            main#home div[style*="display: flex"] { flex-direction: column; gap: 10px !important; }
+            main#home .btn { width: 100% !important; }
+        }
     </style>
 </head>
 <body>
 
     <header>
         <div class="portal-logo" onclick="Router.navigate('home')">Higher Education Portal</div>
+        <button class="menu-toggle" onclick="MobileMenu.toggle()" aria-label="Toggle Navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
         <nav>
-            <ul class="nav-links">
+            <ul class="nav-links" id="navLinks">
                 <li><a href="#" onclick="Router.navigate('home')">Home</a></li>
                 <li><a href="#" onclick="Router.navigate('programs')">Academic Programs</a></li>
                 <li><a href="#" onclick="Router.navigate('eligibility')">Eligibility Check</a></li>
                 <li><a href="#" onclick="Router.navigate('fee')">Fee Structure</a></li>
                 <li><a href="#" onclick="Router.navigate('campus')">Student Life</a></li>
                 <li><a href="#" onclick="Router.navigate('contact')">Location</a></li>
-                <li><a href="#" onclick="Router.navigate('apply')" style="color:var(--accent)">Register Now</a></li>
+                <li><a href="#" onclick="Router.navigate('studentsignup')" style="color:var(--accent)">Register Now</a></li>
             </ul>
         </nav>
     </header>
@@ -111,7 +176,7 @@
                 <h1 style="font-size: 3.5rem; line-height: 1.1; margin-bottom: 20px;">Shaping the <br><span style="color:var(--accent)">Leaders of Tomorrow.</span></h1>
                 <p style="margin-bottom: 35px; font-size: 1.1rem; color: #475569; line-height: 1.8;">Welcome to the centralized enrollment gateway for the 2026 intake. Our institution blends academic rigor with digital innovation to provide a world-class educational experience.</p>
                 <div style="display: flex; gap: 15px;">
-                    <button class="btn" style="width:auto; padding:18px 40px;" onclick="Router.navigate('apply')">Get Started</button>
+                    <button class="btn" style="width:auto; padding:18px 40px;" onclick="Router.navigate('studentsignup')">Get Started</button>
                     <button class="btn" style="width:auto; padding:18px 40px; background: #e2e8f0; color: #1e293b;" onclick="Router.navigate('programs')">Explore Courses</button>
                 </div>
             </div>
@@ -196,20 +261,134 @@
                 <p style="margin: 20px 0;">🌐 GPS: 31.390451, 74.241752</p>
                 <p style="margin-top: 20px; font-size: 0.8rem; opacity: 0.6;">Visit us Monday to Saturday (8 AM - 4 PM)</p>
             </div>
-            <iframe style="width:100%; height:350px; border-radius:4px; border:none; box-shadow: 0 10px 15px rgba(0,0,0,0.1);" src="http://googleusercontent.com/maps.google.com/9"></iframe>
+            <iframe style="width:100%; height:350px; border-radius:4px; border:none; box-shadow: 0 10px 15px rgba(0,0,0,0.1);" src="https://maps.google.com/maps?q=31.390451,74.241752&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
+        </div>
+    </section>
+
+    <section id="studentsignup" class="page">
+        <div class="form-box">
+            <h2 style="text-align:center;">Student Registration</h2>
+            <p style="text-align: center; color: #64748b; margin-bottom: 30px;">Create your account to apply</p>
+            <input type="text" id="regName" placeholder="Full Name">
+            <input type="email" id="regEmail" placeholder="Email Address">
+            <input type="password" id="regPass" placeholder="Choose Password">
+            <button class="btn" onclick="Auth.signup()">Sign Up</button>
+            <p style="text-align: center; margin-top: 20px; font-size: 0.9rem; color: #475569;">Already have an account? <a href="#" onclick="Router.navigate('studentlogin')" style="color: var(--accent); font-weight: 700; text-decoration: none;">Log In Here</a></p>
+        </div>
+    </section>
+
+    <section id="studentlogin" class="page">
+        <div class="form-box">
+            <h2 style="text-align:center;">Student Gateway</h2>
+            <p style="text-align: center; color: #64748b; margin-bottom: 30px;">Log in to access the application form</p>
+            <input type="email" id="logEmail" placeholder="Email Address">
+            <input type="password" id="logPass" placeholder="Password">
+            <button class="btn" onclick="Auth.login()">Log In</button>
+            <p style="text-align: center; margin-top: 20px; font-size: 0.9rem; color: #475569;">New applicant? <a href="#" onclick="Router.navigate('studentsignup')" style="color: var(--accent); font-weight: 700; text-decoration: none;">Create Account</a></p>
         </div>
     </section>
 
     <section id="apply" class="page">
-        <div class="form-box" id="step1">
-            <h3 style="text-align: center; margin-bottom: 10px;">New Student Intake 2026</h3>
-            <p style="text-align: center; font-size: 0.85rem; color: #64748b; margin-bottom: 30px;">Step 1: Secure Identity Verification</p>
-            <input type="text" id="nameIn" placeholder="Full Name (As per Matric Result)">
-            <input type="email" id="mailIn" placeholder="Primary Email Address">
-            <button class="btn" onclick="Admin.register()">Register & Access Form</button>
-        </div>
-        <div id="step2" style="display:none; margin-top:20px;">
-            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSe4g1J0BZhNLYRf93zCHlfhuOfaucwa9HhJlmwTqvtur1VGTg/viewform?embedded=true" width="100%" height="900" frameborder="0">Loading Official Application Form...</iframe>
+        <div class="form-box" style="max-width:700px;">
+            <h2 style="text-align: center; margin-bottom: 5px;">College Admission Form</h2>
+            <p style="text-align: center; font-size: 0.85rem; color: #64748b; margin-bottom: 30px;">Please supply correct details to verify enrollment</p>
+            
+            <div id="applicationStatusBlock" style="display:none; text-align:center; margin-bottom:25px; padding:20px; background:#f8fafc; border-radius:4px; border:1px solid #e2e8f0;">
+                <h4 id="statusMessage" style="font-size:1.3rem; margin-bottom:15px; font-weight:800;"></h4>
+                <div id="appealActionBlock" style="display:none; margin-top: 15px;">
+                    <button class="btn" style="background:var(--danger);" onclick="Auth.appealAdmission()">Appeal Admission (Apply Again)</button>
+                </div>
+            </div>
+
+            <div id="registrationInputsBlock">
+                <div class="form-heading-sub">Personal Details Required</div>
+
+                <label>Student Full Name</label>
+                <input type="text" id="formName" readonly>
+
+                <label>Email Address</label>
+                <input type="email" id="formEmail" readonly>
+
+                <label>Father/Guardian Name</label>
+                <input type="text" id="formFather" placeholder="Enter Father or Guardian full name">
+
+                <label>Date of Birth</label>
+                <input type="date" id="formDOB">
+
+                <label>Gender</label>
+                <select id="formGender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <label>Mobile Number</label>
+                <input type="tel" id="formPhone" placeholder="e.g., 03XXXXXXXXX">
+
+                <label>Address</label>
+                <input type="text" id="formAddress" placeholder="Complete residential street address">
+
+                <label>District & Province</label>
+                <input type="text" id="formDistrict" placeholder="e.g., Okara, Punjab">
+
+                <label>Religion</label>
+                <input type="text" id="formReligion" placeholder="e.g., Islam, Christianity">
+
+                <label>Nationality</label>
+                <input type="text" id="formNationality" value="Pakistani">
+
+                <div class="form-heading-sub">Academic Standing Profile</div>
+
+                <label>Desired Academic Program Select</label>
+                <select id="formTrack" onchange="Auth.calculateRealtimeAcademicMetrics()">
+                    <option value="FSc Pre-Medical">FSc Pre-Medical (Req: 65%)</option>
+                    <option value="FSc Pre-Engineering">FSc Pre-Engineering (Req: 65%)</option>
+                    <option value="ICS Computer Science">ICS Computer Science (Req: 65%)</option>
+                    <option value="FA / I.Com">FA / I.Com (Req: 50%)</option>
+                </select>
+
+                <label>Educational Board Name</label>
+                <input type="text" id="formBoardName" placeholder="e.g. BISE Lahore">
+
+                <label>Board Roll Number (Matriculation)</label>
+                <input type="number" id="formRollNo" placeholder="Enter Matric Roll Number">
+
+                <label>Matric Total Marks</label>
+                <input type="number" id="formMatTotal" placeholder="e.g. 1100" oninput="Auth.calculateRealtimeAcademicMetrics()">
+
+                <label>Matric Obtained Marks</label>
+                <input type="number" id="formMatObt" placeholder="e.g. 850" oninput="Auth.calculateRealtimeAcademicMetrics()">
+
+                <div id="realtimeAdmissionMetricsFeedback" style="margin: 15px 0; padding: 15px; border-radius: 4px; background: #f8fafc; font-weight: 700; border: 1px solid #cbd5e1; font-size: 0.95rem;">
+                    Calculated Percentage: <span id="lblCalcPercent">0.00%</span><br>
+                    Eligibility Verification Status: <span id="lblEligibilityState">Awaiting Data...</span>
+                </div>
+
+                <div class="form-heading-sub">Required Documents Upload</div>
+                
+                <label>Matric Result Card / DMC</label>
+                <input type="file" id="docMatricDMC" accept="image/*,application/pdf" style="border:1px dashed #cbd5e1; padding:10px; background:#fff;">
+
+                <label>Matric Certificate (if issued)</label>
+                <input type="file" id="docMatricCert" accept="image/*,application/pdf" style="border:1px dashed #cbd5e1; padding:10px; background:#fff;">
+
+                <label>9th Class Result Card</label>
+                <input type="file" id="docNinthCard" accept="image/*,application/pdf" style="border:1px dashed #cbd5e1; padding:10px; background:#fff;">
+
+                <label>School Leaving Certificate</label>
+                <input type="file" id="docSchoolLeave" accept="image/*,application/pdf" style="border:1px dashed #cbd5e1; padding:10px; background:#fff;">
+
+                <label>Student B-Form or CNIC</label>
+                <input type="file" id="docStudentIdentity" accept="image/*,application/pdf" style="border:1px dashed #cbd5e1; padding:10px; background:#fff;">
+
+                <label>Father/Guardian CNIC copy</label>
+                <input type="file" id="docFatherCNIC" accept="image/*,application/pdf" style="border:1px dashed #cbd5e1; padding:10px; background:#fff;">
+
+                <label>Student Photo</label>
+                <input type="file" id="docPhoto" accept="image/*" style="border:1px dashed #cbd5e1; padding:10px; background:#fff;">
+
+                <button id="registerSubmitBtn" class="btn" style="margin-top:30px; background:var(--success);" onclick="Auth.submitFullAdmissionRequest()">Submit Complete Application</button>
+            </div>
         </div>
     </section>
 
@@ -226,15 +405,32 @@
         <div class="section-header"><h2>Student Management System</h2><hr></div>
         <div class="table-container">
             <table>
-                <thead><tr><th>Student Record</th><th>Contact Link</th><th>Admission Status</th><th>Governance Actions</th></tr></thead>
+                <thead>
+                    <tr>
+                        <th style="width: 40px; padding: 20px 10px 20px 20px;"><input type="checkbox" id="selectAllCheckbox" onclick="Admin.toggleSelectAll(this)"></th>
+                        <th>Student & Personal Record</th>
+                        <th>Academic Metrics Profile</th>
+                        <th>Admission Status</th>
+                        <th>Governance Actions</th>
+                    </tr>
+                </thead>
                 <tbody id="dashBody"></tbody>
             </table>
         </div>
-        <div style="margin-top:30px; display:flex; gap:15px;">
-            <button class="btn" style="background:var(--accent); color:var(--primary);" onclick="Admin.exportExcel()">Generate CSV Report</button>
-            <button class="btn" style="background:var(--secondary);" onclick="Router.navigate('home')">Terminate Session</button>
+        <div style="margin-top:30px; display:flex; gap:15px; flex-wrap: wrap;">
+            <button class="btn" style="background:var(--accent); color:var(--primary); width: auto; padding: 18px 30px;" onclick="Admin.exportExcel()">Generate CSV Report</button>
+            <button class="btn" style="background:var(--danger); width: auto; padding: 18px 30px;" onclick="Admin.deleteMultipleRecords()">Delete Selected Applications</button>
+            <button class="btn" style="background:var(--secondary); width: auto; padding: 18px 30px;" onclick="Router.navigate('home')">Terminate Session</button>
         </div>
     </section>
+
+    <div id="adminReviewModal" class="modal-overlay">
+        <div class="modal-card">
+            <h2 style="border-bottom: 3px solid var(--accent); padding-bottom: 10px; color: var(--primary);">Application Profile Review Console</h2>
+            <div id="modalProfileContentBody" style="margin-top: 20px; line-height: 1.8;"></div>
+            <button class="modal-close-btn" onclick="Admin.closeReviewModal()">Dismiss Panel</button>
+        </div>
+    </div>
 
     <footer>
         <div class="footer-grid">
@@ -261,9 +457,22 @@
 
     <script>
         const DB_URL = "https://online-portal-for-uni-project-default-rtdb.firebaseio.com/admissions.json";
+        const AUTH_URL = "https://online-portal-for-uni-project-default-rtdb.firebaseio.com/users.json";
+
+        const MobileMenu = {
+            toggle: function() {
+                const navLinks = document.getElementById('navLinks');
+                navLinks.classList.toggle('mobile-active');
+            },
+            close: function() {
+                const navLinks = document.getElementById('navLinks');
+                navLinks.classList.remove('mobile-active');
+            }
+        };
 
         const Router = {
             navigate: function(id) {
+                MobileMenu.close();
                 document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
                 document.getElementById(id).classList.add('active');
                 window.scrollTo(0,0);
@@ -281,25 +490,241 @@
             }
         };
 
+        const Auth = {
+            currentApplicantRecordId: null,
+
+            signup: async function() {
+                const name = document.getElementById('regName').value.trim();
+                const email = document.getElementById('regEmail').value.trim();
+                const password = document.getElementById('regPass').value.trim();
+
+                if(!name || !email || !password) return alert("Validation Error: All fields are required.");
+
+                try {
+                    const res = await fetch(AUTH_URL);
+                    const users = await res.json();
+                    if(users) {
+                        for(let id in users) {
+                            if(users[id] && users[id].email && users[id].email.trim().toLowerCase() === email.toLowerCase()) {
+                                return alert("Error: An account with this email already exists.");
+                            }
+                        }
+                    }
+                    
+                    const userPayload = { name, email: email.toLowerCase(), password };
+                    await fetch(AUTH_URL, { method: 'POST', body: JSON.stringify(userPayload) });
+                    alert("Account created successfully! Please log in.");
+                    Router.navigate('studentlogin');
+                } catch(err) { alert("Connectivity Error: Authentication server offline."); }
+            },
+
+            login: async function() {
+                const email = document.getElementById('logEmail').value.trim().toLowerCase();
+                const password = document.getElementById('logPass').value.trim();
+
+                if(!email || !password) return alert("Validation Error: Please enter both email and password.");
+
+                try {
+                    const res = await fetch(AUTH_URL);
+                    const users = await res.json();
+                    let matchedUser = null;
+
+                    if(users) {
+                        for(let id in users) {
+                            if(users[id] && users[id].email && users[id].email.trim().toLowerCase() === email && users[id].password === password) {
+                                matchedUser = users[id];
+                                break;
+                            }
+                        }
+                    }
+
+                    if(matchedUser) {
+                        document.getElementById('formName').value = matchedUser.name;
+                        document.getElementById('formEmail').value = matchedUser.email;
+                        
+                        // Default UI States Configuration
+                        document.getElementById('registrationInputsBlock').style.display = "block";
+                        document.getElementById('registerSubmitBtn').style.display = "block";
+                        document.getElementById('registerSubmitBtn').disabled = false;
+                        document.getElementById('applicationStatusBlock').style.display = "none";
+                        document.getElementById('appealActionBlock').style.display = "none";
+
+                        const admRes = await fetch(DB_URL);
+                        const admissions = await admRes.json();
+                        Auth.currentApplicantRecordId = null;
+
+                        if(admissions) {
+                            for(let id in admissions) {
+                                if(admissions[id] && admissions[id].e && admissions[id].e.trim().toLowerCase() === email) {
+                                    Auth.currentApplicantRecordId = id;
+                                    const status = admissions[id].status;
+                                    
+                                    document.getElementById('registerSubmitBtn').style.display = "none";
+                                    document.getElementById('registerSubmitBtn').disabled = true;
+                                    document.getElementById('registrationInputsBlock').style.display = "none";
+                                    document.getElementById('applicationStatusBlock').style.display = "block";
+                                    
+                                    if(status === "Pending") {
+                                        document.getElementById('statusMessage').innerHTML = "Status: Application In Review ⏳";
+                                        document.getElementById('statusMessage').style.color = "var(--secondary)";
+                                    } else if(status === "Accepted") {
+                                        document.getElementById('statusMessage').innerHTML = "Status: Admission Approved ✅";
+                                        document.getElementById('statusMessage').style.color = "var(--success)";
+                                    } else if(status === "Rejected") {
+                                        document.getElementById('statusMessage').innerHTML = "Status: Admission Rejected ❌";
+                                        document.getElementById('statusMessage').style.color = "var(--danger)";
+                                        document.getElementById('appealActionBlock').style.display = "block";
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        Router.navigate('apply');
+                    } else {
+                        alert("Authentication Error: Invalid email or password.");
+                    }
+                } catch(err) { alert("Connectivity Error: Unable to verify credentials."); }
+            },
+
+            calculateRealtimeAcademicMetrics: function() {
+                const tot = parseFloat(document.getElementById('formMatTotal').value) || 0;
+                const obt = parseFloat(document.getElementById('formMatObt').value) || 0;
+                const track = document.getElementById('formTrack').value;
+                const lblPct = document.getElementById('lblCalcPercent');
+                const lblSts = document.getElementById('lblEligibilityState');
+
+                if(tot <= 0 || obt < 0 || obt > tot) {
+                    lblPct.innerHTML = "0.00%";
+                    lblSts.innerHTML = "Invalid Marks Range Provided";
+                    lblSts.style.color = "var(--danger)";
+                    return false;
+                }
+
+                const pct = (obt / tot) * 100;
+                lblPct.innerHTML = pct.toFixed(2) + "%";
+
+                let benchmark = (track === "FA / I.Com") ? 50 : 65;
+
+                if(pct >= benchmark) {
+                    lblSts.innerHTML = "ELIGIBLE FOR SELECTION ✅";
+                    lblSts.style.color = "var(--success)";
+                    return true;
+                } else {
+                    lblSts.innerHTML = `NOT ELIGIBLE (Requires Minimum ${benchmark}%) ❌`;
+                    lblSts.style.color = "var(--danger)";
+                    return false;
+                }
+            },
+
+            readDocumentAsDataURL: function(inputElementId) {
+                return new Promise((resolve) => {
+                    const field = document.getElementById(inputElementId);
+                    if(!field || !field.files || field.files.length === 0) return resolve("Not Uploaded");
+                    const fileReader = new FileReader();
+                    fileReader.onload = function(e) { resolve(e.target.result); };
+                    fileReader.readAsDataURL(field.files[0]);
+                });
+            },
+
+            submitFullAdmissionRequest: async function() {
+                const n = document.getElementById('formName').value;
+                const e = document.getElementById('formEmail').value.toLowerCase();
+                const father = document.getElementById('formFather').value.trim();
+                const dob = document.getElementById('formDOB').value;
+                const gender = document.getElementById('formGender').value;
+                const phone = document.getElementById('formPhone').value.trim();
+                const address = document.getElementById('formAddress').value.trim();
+                const district = document.getElementById('formDistrict').value.trim();
+                const religion = document.getElementById('formReligion').value.trim();
+                const nationality = document.getElementById('formNationality').value.trim();
+                
+                const track = document.getElementById('formTrack').value;
+                const boardName = document.getElementById('formBoardName').value.trim();
+                const rollNo = document.getElementById('formRollNo').value.trim();
+                const matTotal = document.getElementById('formMatTotal').value.trim();
+                const matObt = document.getElementById('formMatObt').value.trim();
+
+                if(!father || !dob || !phone || !address || !district || !religion || !nationality || !boardName || !rollNo || !matTotal || !matObt) {
+                    return alert("Validation Error: Please fill out all required form fields before submitting.");
+                }
+
+                const isAcademicEligible = Auth.calculateRealtimeAcademicMetrics();
+                if(!isAcademicEligible) {
+                    return alert("Admission Blocked: Your academic standing percentages do not meet criteria benchmarks.");
+                }
+
+                document.getElementById('registerSubmitBtn').innerHTML = "Processing Document Safe System Layers...";
+                document.getElementById('registerSubmitBtn').disabled = true;
+
+                const baseMatricDMC = await Auth.readDocumentAsDataURL('docMatricDMC');
+                const baseMatricCert = await Auth.readDocumentAsDataURL('docMatricCert');
+                const baseNinthCard = await Auth.readDocumentAsDataURL('docNinthCard');
+                const baseSchoolLeave = await Auth.readDocumentAsDataURL('docSchoolLeave');
+                const baseStudentIdentity = await Auth.readDocumentAsDataURL('docStudentIdentity');
+                const baseFatherCNIC = await Auth.readDocumentAsDataURL('docFatherCNIC');
+                const basePhoto = await Auth.readDocumentAsDataURL('docPhoto');
+
+                const studentData = {
+                    n, e, father, dob, gender, phone, address, district, religion, nationality,
+                    track, boardName, rollNo, matTotal, matObt,
+                    doc1: baseMatricDMC, doc2: baseMatricCert, doc3: baseNinthCard, doc4: baseSchoolLeave,
+                    doc5: baseStudentIdentity, doc6: baseFatherCNIC, doc7: basePhoto,
+                    status: "Pending",
+                    date: new Date().toLocaleDateString()
+                };
+
+                try {
+                    await fetch(DB_URL, { method: 'POST', body: JSON.stringify(studentData) });
+                    
+                    document.getElementById('registrationInputsBlock').style.display = "none";
+                    document.getElementById('applicationStatusBlock').style.display = "block";
+                    document.getElementById('statusMessage').innerHTML = "Status: Application In Review ⏳";
+                    document.getElementById('statusMessage').style.color = "var(--secondary)";
+                    alert("Application package successfully locked and submitted!");
+                } catch(err) { 
+                    alert("Network Connection Error: Form submission failed."); 
+                    document.getElementById('registerSubmitBtn').innerHTML = "Submit Complete Application";
+                    document.getElementById('registerSubmitBtn').disabled = false;
+                }
+            },
+
+            appealAdmission: async function() {
+                if(!Auth.currentApplicantRecordId) return;
+                try {
+                    const deleteURL = `https://online-portal-for-uni-project-default-rtdb.firebaseio.com/admissions/${Auth.currentApplicantRecordId}.json`;
+                    await fetch(deleteURL, { method: 'DELETE' });
+                    
+                    document.getElementById('applicationStatusBlock').style.display = "none";
+                    document.getElementById('appealActionBlock').style.display = "none";
+                    document.getElementById('registrationInputsBlock').style.display = "block";
+                    document.getElementById('registerSubmitBtn').style.display = "block";
+                    document.getElementById('registerSubmitBtn').disabled = false;
+                    
+                    document.getElementById('formFather').value = "";
+                    document.getElementById('formDOB').value = "";
+                    document.getElementById('formPhone').value = "";
+                    document.getElementById('formAddress').value = "";
+                    document.getElementById('formDistrict').value = "";
+                    document.getElementById('formReligion').value = "";
+                    document.getElementById('formBoardName').value = "";
+                    document.getElementById('formRollNo').value = "";
+                    document.getElementById('formMatTotal').value = "";
+                    document.getElementById('formMatObt').value = "";
+                    
+                    Auth.currentApplicantRecordId = null;
+                    alert("Your old record has been cleared. You can now re-submit your identity validation.");
+                } catch(err) { alert("Error updating dynamic appeal request."); }
+            }
+        };
+
         const Admin = {
             key: "22334455",
             localData: [],
 
             login: function() {
                 if(document.getElementById('passIn').value === this.key) Router.navigate('dash');
-                else alert("Authentication Error: Invalid Credentials.");
-            },
-
-            register: async function() {
-                const n = document.getElementById('nameIn').value;
-                const e = document.getElementById('mailIn').value;
-                if(!n || !e) return alert("Validation Error: Please provide full details.");
-                const student = { n, e, status: "Pending", date: new Date().toLocaleDateString() };
-                try {
-                    await fetch(DB_URL, { method: 'POST', body: JSON.stringify(student) });
-                    document.getElementById('step1').style.display = "none";
-                    document.getElementById('step2').style.display = "block";
-                } catch(err) { alert("Connectivity Error: Database Offline."); }
+                else alert("Authentication Error: Invalid PIN.");
             },
 
             fetchData: async function() {
@@ -308,16 +733,61 @@
                     const data = await res.json();
                     this.localData = [];
                     if(data) { for(let id in data) this.localData.push({ id, ...data[id] }); }
+                    
+                    // Reset global checkbox state upon reload
+                    const masterBox = document.getElementById('selectAllCheckbox');
+                    if(masterBox) masterBox.checked = false;
+
                     this.sync();
                 } catch(err) { console.log(err); }
             },
 
+            toggleSelectAll: function(masterCheckbox) {
+                const subBoxes = document.querySelectorAll('.student-select-box');
+                subBoxes.forEach(box => box.checked = masterCheckbox.checked);
+            },
+
+            deleteMultipleRecords: async function() {
+                const selectedBoxes = document.querySelectorAll('.student-select-box:checked');
+                if(selectedBoxes.length === 0) return alert("Validation Error: No applications selected for bulk removal.");
+                
+                if(!confirm(`Security Warning: Are you sure you want to permanently delete these ${selectedBoxes.length} selected records?`)) return;
+
+                let failures = 0;
+                for(let box of selectedBoxes) {
+                    const id = box.getAttribute('data-id');
+                    try {
+                        const deleteURL = `https://online-portal-for-uni-project-default-rtdb.firebaseio.com/admissions/${id}.json`;
+                        await fetch(deleteURL, { method: 'DELETE' });
+                    } catch(err) {
+                        failures++;
+                    }
+                }
+
+                if(failures > 0) alert(`Bulk operation complete with errors. ${failures} logs could not be wiped.`);
+                else alert("All selected applications successfully deleted!");
+
+                this.fetchData();
+            },
+
             sync: function() {
                 const b = document.getElementById('dashBody');
-                b.innerHTML = this.localData.map((s, i) => `
+                b.innerHTML = this.localData.map((s, i) => {
+                    const calcPct = (parseFloat(s.matObt) / parseFloat(s.matTotal) * 100) || 0;
+                    return `
                     <tr>
-                        <td><b>${s.n}</b><br><small>${s.date || 'Session 2026'}</small></td>
-                        <td>${s.e}</td>
+                        <td style="padding-left: 20px;"><input type="checkbox" class="student-select-box" data-id="${s.id}"></td>
+                        <td>
+                            <b style="font-size:1.05rem; color:var(--primary);">${s.n}</b><br>
+                            <small>📞 ${s.phone || 'N/A'}</small><br>
+                            <small>✉️ ${s.e}</small><br>
+                            <button class="action-btn decline" style="background:var(--primary); padding:4px 8px; font-size:0.7rem;" onclick="Admin.openReviewModal(${i})">Review Full Application</button>
+                        </td>
+                        <td>
+                            <span class="sub-badge">${s.track || 'N/A'}</span><br>
+                            <small>Board: ${s.boardName || 'N/A'} (Roll: ${s.rollNo || 'N/A'})</small><br>
+                            <small>Marks: <b>${s.matObt || 0} / ${s.matTotal || 0}</b> (${calcPct.toFixed(2)}%)</small>
+                        </td>
                         <td style="color:${s.status==='Accepted'?'var(--success)':(s.status==='Rejected'?'var(--danger)':'#64748b')}; font-weight:800;">${s.status}</td>
                         <td>
                             <button class="action-btn accept" onclick="Admin.action('${s.id}', ${i}, 'Accepted')">Accept</button>
@@ -325,7 +795,75 @@
                             <button class="action-btn delete" onclick="Admin.deleteRecord('${s.id}')">Delete</button>
                         </td>
                     </tr>
-                `).join('');
+                `; }).join('');
+            },
+
+            openReviewModal: function(index) {
+                const s = this.localData[index];
+                const pct = (parseFloat(s.matObt) / parseFloat(s.matTotal) * 100) || 0;
+                
+                let htmlContent = `
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; border-bottom:1px solid #cbd5e1; padding-bottom:15px;">
+                        <div>
+                            <h4 style="color:var(--accent);">Personal Details Profile</h4>
+                            <p><b>Name:</b> ${s.n}</p>
+                            <p><b>Email:</b> ${s.e}</p>
+                            <p><b>Father Name:</b> ${s.father || 'N/A'}</p>
+                            <p><b>DOB:</b> ${s.dob || 'N/A'}</p>
+                            <p><b>Gender:</b> ${s.gender || 'N/A'}</p>
+                            <p><b>Phone:</b> ${s.phone || 'N/A'}</p>
+                            <p><b>Religion:</b> ${s.religion || 'N/A'}</p>
+                            <p><b>Nationality:</b> ${s.nationality || 'N/A'}</p>
+                            <p><b>Address:</b> ${s.address || 'N/A'}, ${s.district || 'N/A'}</p>
+                        </div>
+                        <div>
+                            <h4 style="color:var(--accent);">Academic standing</h4>
+                            <p><b>Applied Degree:</b> ${s.track || 'N/A'}</p>
+                            <p><b>Board Authority:</b> ${s.boardName || 'N/A'}</p>
+                            <p><b>Roll Number:</b> ${s.rollNo || 'N/A'}</p>
+                            <p><b>Academic Score:</b> ${s.matObt || 0} / ${s.matTotal || 0}</p>
+                            <p><b>Calculated Percentage:</b> ${pct.toFixed(2)}%</p>
+                            <p><b>Submission Date:</b> ${s.date || '2026'}</p>
+                            <p><b>Current Status:</b> <b>${s.status}</b></p>
+                        </div>
+                    </div>
+                    <div style="margin-top:20px;">
+                        <h4 style="color:var(--accent); margin-bottom:10px;">Submitted Identity and Academic Evidence Packages</h4>
+                        <div style="display:flex; flex-wrap:wrap; gap:10px;">
+                            ${Admin.generateMockFilePreviewLink(s.doc1, "Matric DMC / Result Card")}
+                            ${Admin.generateMockFilePreviewLink(s.doc2, "Matric Certificate")}
+                            ${Admin.generateMockFilePreviewLink(s.doc3, "9th Result Card")}
+                            ${Admin.generateMockFilePreviewLink(s.doc4, "School Leaving Cert")}
+                            ${Admin.generateMockFilePreviewLink(s.doc5, "Student B-Form / CNIC")}
+                            ${Admin.generateMockFilePreviewLink(s.doc6, "Father CNIC Copy")}
+                            ${Admin.generateMockFilePreviewLink(s.doc7, "Passport Photo")}
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('modalProfileContentBody').innerHTML = htmlContent;
+                document.getElementById('adminReviewModal').style.display = "flex";
+            },
+
+            generateMockFilePreviewLink: function(dataStr, label) {
+                if(!dataStr || dataStr === "Not Uploaded") {
+                    return `<span style="padding:8px; background:#e2e8f0; color:#94a3b8; border-radius:4px; font-size:0.8rem;">${label} (Missing)</span>`;
+                }
+                return `<button class="doc-preview-link" onclick="Admin.renderDocumentViewWindow(this)" data-src="${dataStr}">${label} 👁️</button>`;
+            },
+
+            renderDocumentViewWindow: function(btnElement) {
+                const dataStr = btnElement.getAttribute('data-src');
+                const win = window.open();
+                if(dataStr.startsWith("data:application/pdf")) {
+                    win.document.write(`<iframe src="${dataStr}" style="width:100%; height:100%; border:none;"></iframe>`);
+                } else {
+                    win.document.write(`<img src="${dataStr}" style="max-width:100%; height:auto; display:block; margin:20px auto; box-shadow:0 10px 15px rgba(0,0,0,0.15);"/>`);
+                }
+            },
+
+            closeReviewModal: function() {
+                document.getElementById('adminReviewModal').style.display = "none";
             },
 
             action: async function(id, index, status) {
@@ -355,7 +893,8 @@
             },
 
             exportExcel: function() {
-                let csv = "Full Name,Email Address,Admission Status\n" + this.localData.map(s => `${s.n},${s.e},${s.status}`).join("\n");
+                let csv = "Student Name,Email,Father Name,DOB,Gender,Phone,Address,District/Province,Religion,Nationality,Applied Program,Board Name,Roll No,Matric Obtained,Matric Total,Admission Status\n" + 
+                    this.localData.map(s => `"${s.n}","${s.e}","${s.father || ''}","${s.dob || ''}","${s.gender || ''}","${s.phone || ''}","${s.address || ''}","${s.district || ''}","${s.religion || ''}","${s.nationality || ''}","${s.track || ''}","${s.boardName || ''}","${s.rollNo || ''}","${s.matObt || ''}","${s.matTotal || ''}","${s.status}"`).join("\n");
                 const blob = new Blob([csv], { type: 'text/csv' });
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a'); a.href = url; a.download = 'Master_Admission_Registry_2026.csv'; a.click();
