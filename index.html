@@ -176,7 +176,7 @@
                 <h1 style="font-size: 3.5rem; line-height: 1.1; margin-bottom: 20px;">Shaping the <br><span style="color:var(--accent)">Leaders of Tomorrow.</span></h1>
                 <p style="margin-bottom: 35px; font-size: 1.1rem; color: #475569; line-height: 1.8;">Welcome to the centralized enrollment gateway for the 2026 intake. Our institution blends academic rigor with digital innovation to provide a world-class educational experience.</p>
                 <div style="display: flex; gap: 15px;">
-
+                    <button class="btn" style="width:auto; padding:18px 40px;" onclick="Router.navigate('studentsignup')">Get Started</button>
                     <button class="btn" style="width:auto; padding:18px 40px; background: #e2e8f0; color: #1e293b;" onclick="Router.navigate('programs')">Explore Courses</button>
                 </div>
             </div>
@@ -478,6 +478,25 @@
         <span class="admin-link" onclick="Router.navigate('login')">Administrative Portal Access</span>
     </footer>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-analytics.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCTU4snUDVqydY4qeOUIFdE2zqttgiD7aU",
+            authDomain: "online-portal-for-uni-project.firebaseapp.com",
+            databaseURL: "https://online-portal-for-uni-project-default-rtdb.firebaseio.com",
+            projectId: "online-portal-for-uni-project",
+            storageBucket: "online-portal-for-uni-project.firebasestorage.app",
+            messagingSenderId: "567863388718",
+            appId: "1:567863388718:web:046bbba85d93ab572a4dbf",
+            measurementId: "G-Q9SLSX4VYM"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+    </script>
+
     <script>
         const DB_URL = "https://online-portal-for-uni-project-default-rtdb.firebaseio.com/admissions.json";
         const AUTH_URL = "https://online-portal-for-uni-project-default-rtdb.firebaseio.com/users.json";
@@ -584,6 +603,7 @@
                         document.getElementById('formName').value = matchedUser.name;
                         document.getElementById('formEmail').value = matchedUser.email;
                         
+                        // Default UI States Configuration
                         document.getElementById('registrationInputsBlock').style.display = "block";
                         document.getElementById('registerSubmitBtn').style.display = "block";
                         document.getElementById('registerSubmitBtn').disabled = false;
