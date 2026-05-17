@@ -76,7 +76,7 @@
         .card h4 { color: var(--accent); margin-bottom: 15px; text-transform: uppercase; font-size: 0.9rem; }
 
         /* --- DATA TABLES --- */
-        .table-container { overflow-x: auto; background: var(--white); border-radius: 4px; border: 1px solid #e2e8f0; }
+        .table-container { overflow-x: auto; background: var(--white); border-radius: 4px; border: 1px solid #e2e8f0; margin-bottom: 30px; }
         table { width: 100%; border-collapse: collapse; }
         th { background: var(--secondary); color: var(--white); padding: 20px; text-align: left; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
         td { padding: 18px; border-bottom: 1px solid #e2e8f0; font-size: 0.95rem; }
@@ -176,7 +176,7 @@
                 <h1 style="font-size: 3.5rem; line-height: 1.1; margin-bottom: 20px;">Shaping the <br><span style="color:var(--accent)">Leaders of Tomorrow.</span></h1>
                 <p style="margin-bottom: 35px; font-size: 1.1rem; color: #475569; line-height: 1.8;">Welcome to the centralized enrollment gateway for the 2026 intake. Our institution blends academic rigor with digital innovation to provide a world-class educational experience.</p>
                 <div style="display: flex; gap: 15px;">
-                    <button class="btn" style="width:auto; padding:18px 40px;" onclick="Router.navigate('studentsignup')">Get Started</button>
+
                     <button class="btn" style="width:auto; padding:18px 40px; background: #e2e8f0; color: #1e293b;" onclick="Router.navigate('programs')">Explore Courses</button>
                 </div>
             </div>
@@ -252,16 +252,40 @@
     </section>
 
     <section id="contact" class="page">
-        <div class="section-header"><h2>Global Headquarters</h2><hr></div>
-        <div class="grid">
+        <div class="section-header"><h2>Global Headquarters & Feedback</h2><hr></div>
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); align-items: start;">
             <div class="card" style="background: var(--primary); color: white;">
                 <h4>Location Details</h4>
                 <p style="margin: 20px 0;">📍 Lahore, Pakistan</p>
                 <p style="margin: 20px 0;">📞 Helpline: +92 312 3456789</p>
                 <p style="margin: 20px 0;">🌐 GPS: 31.390451, 74.241752</p>
                 <p style="margin-top: 20px; font-size: 0.8rem; opacity: 0.6;">Visit us Monday to Saturday (8 AM - 4 PM)</p>
+                <iframe style="width:100%; height:200px; border-radius:4px; border:none; margin-top:20px; box-shadow: 0 10px 15px rgba(0,0,0,0.1);" src="https://maps.google.com/maps?q=31.390451,74.241752&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
             </div>
-            <iframe style="width:100%; height:350px; border-radius:4px; border:none; box-shadow: 0 10px 15px rgba(0,0,0,0.1);" src="https://maps.google.com/maps?q=31.390451,74.241752&t=&z=13&ie=UTF8&iwloc=&output=embed"></iframe>
+            
+            <div class="card" style="background: #ffffff; border: 1px solid #e2e8f0;">
+                <h3 style="color: var(--primary); margin-bottom: 5px; font-family: Montserrat; font-weight:700;">Grievance & Feedback Desk</h3>
+                <p style="font-size: 0.8rem; color: #64748b; margin-bottom: 15px;">Submit complaints, reports, or architectural suggestions directly</p>
+                
+                <label style="margin-top:5px;">Your Full Name</label>
+                <input type="text" id="helpdeskName" placeholder="Enter Full Name" style="margin: 5px 0 12px 0; padding:12px;">
+                
+                <label>Email Address</label>
+                <input type="email" id="helpdeskEmail" placeholder="Enter Email Address" style="margin: 5px 0 12px 0; padding:12px;">
+                
+                <label>Nature of Communication</label>
+                <select id="helpdeskType" style="margin: 5px 0 12px 0; padding:12px;">
+                    <option value="Complain">Complain / Grievance</option>
+                    <option value="Suggestion">Suggestion / Idea</option>
+                    <option value="Report">Report System Flaw</option>
+                    <option value="Contact">General Contact Inquiry</option>
+                </select>
+                
+                <label>Detailed Summary</label>
+                <textarea id="helpdeskMessage" rows="4" placeholder="Type your context here..." style="width: 100%; padding: 12px; margin: 5px 0 15px 0; border: 1px solid #cbd5e1; border-radius: 4px; outline: none; background: #fcfcfc; font-size:0.95rem; resize: none;"></textarea>
+                
+                <button class="btn" onclick="Auth.submitHelpdeskForm()" style="padding:14px; font-size:0.85rem;">Submit Ticket to Board</button>
+            </div>
         </div>
     </section>
 
@@ -318,7 +342,13 @@
             
             <div id="applicationStatusBlock" style="display:none; text-align:center; margin-bottom:25px; padding:20px; background:#f8fafc; border-radius:4px; border:1px solid #e2e8f0;">
                 <h4 id="statusMessage" style="font-size:1.3rem; margin-bottom:15px; font-weight:800;"></h4>
-                <div id="appealActionBlock" style="display:none; margin-top: 15px;">
+                
+                <div id="approvedActionsBlock" style="display:none; margin-top:15px; gap:10px;">
+                    <button class="btn" style="background:var(--success); margin-bottom:10px;" onclick="Auth.generateFeeVoucherPDF()">Download Fee Voucher</button>
+                    <button class="btn" style="background:var(--accent); color:var(--primary);" onclick="Auth.generateStudentIDCardPDF()">Download Student ID Card</button>
+                </div>
+
+                <div id="appealActionBlock" style="display:none;">
                     <button class="btn" style="background:var(--danger);" onclick="Auth.appealAdmission()">Appeal Admission (Apply Again)</button>
                 </div>
             </div>
@@ -426,6 +456,8 @@
 
     <section id="dash" class="page">
         <div class="section-header"><h2>Student Management System</h2><hr></div>
+        
+        <h3 style="margin-bottom:15px; color:var(--primary); font-family:Montserrat;">Active Admission Requests Registry</h3>
         <div class="table-container">
             <table>
                 <thead>
@@ -440,10 +472,28 @@
                 <tbody id="dashBody"></tbody>
             </table>
         </div>
-        <div style="margin-top:30px; display:flex; gap:15px; flex-wrap: wrap;">
-            <button class="btn" style="background:var(--accent); color:var(--primary); width: auto; padding: 18px 30px;" onclick="Admin.exportExcel()">Generate CSV Report</button>
-            <button class="btn" style="background:var(--danger); width: auto; padding: 18px 30px;" onclick="Admin.deleteMultipleRecords()">Delete Selected Applications</button>
-            <button class="btn" style="background:var(--secondary); width: auto; padding: 18px 30px;" onclick="Router.navigate('home')">Terminate Session</button>
+        <div style="margin-top:10px; margin-bottom:50px; display:flex; gap:15px; flex-wrap: wrap;">
+            <button class="btn" style="background:var(--accent); color:var(--primary); width: auto; padding: 14px 25px; font-size:0.85rem;" onclick="Admin.exportExcel()">Generate CSV Report</button>
+            <button class="btn" style="background:var(--danger); width: auto; padding: 14px 25px; font-size:0.85rem;" onclick="Admin.deleteMultipleRecords()">Delete Selected Applications</button>
+        </div>
+
+        <h3 style="margin-bottom:15px; color:var(--primary); font-family:Montserrat; border-top: 2px dashed #cbd5e1; padding-top:40px;">Received Support Desk Tickets & Grievances</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sender Identification</th>
+                        <th>Ticket Type</th>
+                        <th>Detailed Context Summary</th>
+                        <th>Operational Action</th>
+                    </tr>
+                </thead>
+                <tbody id="complainDashBody"><tr><td colspan="4" style="text-align:center; color:#64748b;">Awaiting secure database synchronizations...</td></tr></tbody>
+            </table>
+        </div>
+        
+        <div style="margin-top:30px;">
+            <button class="btn" style="background:var(--secondary); width: auto; padding: 15px 30px;" onclick="Router.navigate('home')">Terminate Session</button>
         </div>
     </section>
 
@@ -500,6 +550,7 @@
     <script>
         const DB_URL = "https://online-portal-for-uni-project-default-rtdb.firebaseio.com/admissions.json";
         const AUTH_URL = "https://online-portal-for-uni-project-default-rtdb.firebaseio.com/users.json";
+        const COMPLAINT_URL = "https://online-portal-for-uni-project-default-rtdb.firebaseio.com/complaints.json";
 
         const MobileMenu = {
             toggle: function() {
@@ -545,6 +596,7 @@
         const Auth = {
             currentApplicantRecordId: null,
             forgotValidatedUserId: null,
+            activeApplicantDataSnapshot: null, 
 
             signup: async function() {
                 const name = document.getElementById('regName').value.trim();
@@ -603,12 +655,13 @@
                         document.getElementById('formName').value = matchedUser.name;
                         document.getElementById('formEmail').value = matchedUser.email;
                         
-                        // Default UI States Configuration
                         document.getElementById('registrationInputsBlock').style.display = "block";
                         document.getElementById('registerSubmitBtn').style.display = "block";
                         document.getElementById('registerSubmitBtn').disabled = false;
                         document.getElementById('applicationStatusBlock').style.display = "none";
+                        document.getElementById('approvedActionsBlock').style.display = "none";
                         document.getElementById('appealActionBlock').style.display = "none";
+                        Auth.activeApplicantDataSnapshot = null;
 
                         const admRes = await fetch(DB_URL);
                         const admissions = await admRes.json();
@@ -618,6 +671,7 @@
                             for(let id in admissions) {
                                 if(admissions[id] && admissions[id].e && admissions[id].e.trim().toLowerCase() === email) {
                                     Auth.currentApplicantRecordId = id;
+                                    Auth.activeApplicantDataSnapshot = admissions[id];
                                     const status = admissions[id].status;
                                     
                                     document.getElementById('registerSubmitBtn').style.display = "none";
@@ -631,6 +685,7 @@
                                     } else if(status === "Accepted") {
                                         document.getElementById('statusMessage').innerHTML = "Status: Admission Approved ✅";
                                         document.getElementById('statusMessage').style.color = "var(--success)";
+                                        document.getElementById('approvedActionsBlock').style.display = "flex";
                                     } else if(status === "Rejected") {
                                         document.getElementById('statusMessage').innerHTML = "Status: Admission Rejected ❌";
                                         document.getElementById('statusMessage').style.color = "var(--danger)";
@@ -691,6 +746,24 @@
                     alert("Security update complete! Password updated successfully.");
                     Router.navigate('studentlogin');
                 } catch(err) { alert("Connectivity Error: Failed to write update to database."); }
+            },
+
+            submitHelpdeskForm: async function() {
+                const name = document.getElementById('helpdeskName').value.trim();
+                const email = document.getElementById('helpdeskEmail').value.trim().toLowerCase();
+                const type = document.getElementById('helpdeskType').value;
+                const message = document.getElementById('helpdeskMessage').value.trim();
+
+                if(!name || !email || !message) return alert("Validation Error: Please complete all field coordinates.");
+
+                const ticketPayload = { name, email, type, message, timestamp: new Date().toLocaleString() };
+                try {
+                    await fetch(COMPLAINT_URL, { method: 'POST', body: JSON.stringify(ticketPayload) });
+                    alert("Thank you! Your ticket package has been routed securely to the administrative panel board.");
+                    document.getElementById('helpdeskName').value = "";
+                    document.getElementById('helpdeskEmail').value = "";
+                    document.getElementById('helpdeskMessage').value = "";
+                } catch(err) { alert("Connectivity Error: Helpdesk system database is offline."); }
             },
 
             calculateRealtimeAcademicMetrics: function() {
@@ -803,6 +876,7 @@
                     
                     document.getElementById('applicationStatusBlock').style.display = "none";
                     document.getElementById('appealActionBlock').style.display = "none";
+                    document.getElementById('approvedActionsBlock').style.display = "none";
                     document.getElementById('registrationInputsBlock').style.display = "block";
                     document.getElementById('registerSubmitBtn').style.display = "block";
                     document.getElementById('registerSubmitBtn').disabled = false;
@@ -819,14 +893,201 @@
                     document.getElementById('formMatObt').value = "";
                     
                     Auth.currentApplicantRecordId = null;
+                    Auth.activeApplicantDataSnapshot = null;
                     alert("Your old record has been cleared. You can now re-submit your identity validation.");
                 } catch(err) { alert("Error updating dynamic appeal request."); }
+            },
+
+            generateFeeVoucherPDF: function() {
+                const s = Auth.activeApplicantDataSnapshot;
+                if(!s) return alert("System Error: Profile cache records are empty.");
+
+                const isFSc = (s.track === "FSc Pre-Medical" || s.track === "FSc Pre-Engineering");
+                const totalFee = isFSc ? 55000 : 49000;
+                
+                let tuition = isFSc ? 42000 : 38000;
+                let exam = isFSc ? 5000 : 4000;
+                let reg = 5000;
+                let facilityLabel = isFSc ? "Laboratory" : "Library/IT";
+                let facilityFee = isFSc ? 3000 : 2000;
+
+                const issueDate = new Date().toLocaleDateString();
+                const voucherNo = "VCH-" + (s.rollNo || "2026") + "-" + Math.floor(100 + Math.random() * 900);
+
+                const renderSlipHTML = (slipTitle) => `
+                    <div class="slip">
+                        <div class="v-header">
+                            <div class="v-title">HEI ADMISSION PORTAL</div>
+                            <div style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:#c9a84c; font-weight:700; margin-top:2px;">${slipTitle}</div>
+                        </div>
+                        <div class="meta-row"><span>Voucher No:</span><b>${voucherNo}</b></div>
+                        <div class="meta-row"><span>Name:</span><b>${s.n}</b></div>
+                        <div class="meta-row"><span>Father Name:</span><b>${s.father}</b></div>
+                        <div class="meta-row"><span>Program Track:</span><b>${s.track}</b></div>
+                        <div class="meta-row"><span>Issue Date:</span><b>${issueDate}</b></div>
+                        
+                        <table>
+                            <thead>
+                                <tr><th>Component Description</th><th style="text-align:right;">Amount</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Tuition Fee Installment</td><td style="text-align:right;">${tuition.toLocaleString()}</td></tr>
+                                <tr><td>Exam Charges</td><td style="text-align:right;">${exam.toLocaleString()}</td></tr>
+                                <tr><td>Registration Secure Allocation</td><td style="text-align:right;">${reg.toLocaleString()}</td></tr>
+                                <tr><td>${facilityLabel} Institutional Fund</td><td style="text-align:right;">${facilityFee.toLocaleString()}</td></tr>
+                                <tr class="total-row"><td>TOTAL PAYABLE PKR</td><td style="text-align:right; color:#c9a84c;">${totalFee.toLocaleString()}</td></tr>
+                            </tbody>
+                        </table>
+                        <div class="sig-space">
+                            <div>Officer Signature</div>
+                            <div>Depositor Signature</div>
+                        </div>
+                    </div>
+                `;
+
+                const win = window.open("", "_blank");
+                win.document.write(`
+                    <html>
+                    <head>
+                        <title>Triplicate Fee Voucher - ${s.n}</title>
+                        <style>
+                            @page { size: A4 landscape; margin: 4mm 6mm; }
+                            body { font-family: 'Open Sans', sans-serif; color: #0f172a; margin: 0; padding: 0; background: #fff; }
+                            .voucher-container { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; width: 100%; box-sizing: border-box; }
+                            .slip { border: 1px dashed #0f172a; padding: 25px 15px; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; height: 96vh; }
+                            .v-header { text-align: center; border-bottom: 2px solid #c9a84c; padding-bottom: 6px; margin-bottom: 15px; }
+                            .v-title { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1rem; color: #0f172a; }
+                            .meta-row { display: flex; justify-content: space-between; font-size: 0.82rem; margin: 6px 0; border-bottom: 1px dotted #f1f5f9; padding-bottom:2px; }
+                            .meta-row span { color: #64748b; font-weight: 600; }
+                            table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.8rem; }
+                            th { background: #1e293b; color: #fff; padding: 6px 8px; text-align: left; text-transform: uppercase; font-size: 0.7rem; }
+                            td { padding: 8px 6px; border-bottom: 1px solid #e2e8f0; }
+                            .total-row { font-weight: 800; background: #f8fafc; font-size: 0.85rem; border-top: 2px solid #0f172a; }
+                            .sig-space { display: flex; justify-content: space-between; margin-top: auto; padding-top: 40px; font-size: 0.7rem; color: #64748b; text-align: center; }
+                            .sig-space div { border-top: 1px solid #cbd5e1; width: 45%; padding-top: 5px; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="voucher-container">
+                            ${renderSlipHTML("Bank Copy")}
+                            ${renderSlipHTML("Campus Copy")}
+                            ${renderSlipHTML("Student Copy")}
+                        </div>
+                        <script>window.print();<\/script>
+                    </body>
+                    </html>
+                `);
+                win.document.close();
+            },
+
+            generateStudentIDCardPDF: function() {
+                const s = Auth.activeApplicantDataSnapshot;
+                if(!s) return alert("System Error: Profile cache records are empty.");
+
+                const seedIdStr = "HEI-2026-" + (s.rollNo || Math.floor(100000 + Math.random() * 900000));
+                const parsedImgSrc = (s.doc7 && s.doc7 !== "Not Uploaded") ? s.doc7 : "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='%2364748b'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>";
+
+                const win = window.open("", "_blank");
+                win.document.write(`
+                    <html>
+                    <head>
+                        <title>Student ID Card - ${s.n}</title>
+                        <style>
+                            @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Open+Sans:wght@400;600;700&display=swap');
+                            body { font-family: 'Open Sans', sans-serif; background: #fff; margin: 0; padding: 40px; display: flex; justify-content: center; gap: 40px; }
+                            
+                            .id-side { 
+                                width: 337.5px; height: 600px; 
+                                border-radius: 12px; overflow: hidden; 
+                                box-shadow: 0 15px 35px rgba(15, 23, 42, 0.2); 
+                                border: 2px solid #c9a84c; background: #fff; 
+                                display: flex; flex-direction: column; justify-content: space-between;
+                                position: relative;
+                            }
+                            
+                            .front-header { background: #0f172a; padding: 25px 15px 40px; text-align: center; border-bottom: 5px solid #c9a84c; clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%); }
+                            .inst-title { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.15rem; color: #c9a84c; text-transform: uppercase; letter-spacing: 1px; }
+                            .inst-tag { font-size: 0.65rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 2px; margin-top: 4px; }
+                            .avatar-holder { width: 120px; height: 120px; border-radius: 50%; border: 4px solid #c9a84c; margin: -60px auto 15px; overflow: hidden; background: #fff; box-shadow: 0 8px 16px rgba(0,0,0,0.15); z-index: 10; position: relative; }
+                            .avatar-holder img { width: 100%; height: 100%; object-fit: cover; }
+                            .front-content { text-align: center; padding: 0 25px; flex-grow: 1; }
+                            .s-name { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.35rem; color: #0f172a; text-transform: uppercase; margin-bottom: 4px; }
+                            .s-track { font-size: 0.85rem; font-weight: 700; color: #c9a84c; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 25px; }
+                            .details-grid { display: flex; flex-direction: column; gap: 10px; text-align: left; background: #f8fafc; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0; }
+                            .data-row { display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 4px; }
+                            .data-row span { font-weight: 700; color: #64748b; text-transform: uppercase; font-size: 0.7rem; width: 35%; }
+                            .data-row b { color: #0f172a; }
+                            .front-footer { background: #0f172a; padding: 12px; text-align: center; color: #94a3b8; font-size: 0.65rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+                            
+                            .back-body { padding: 40px 25px; display: flex; flex-direction: column; justify-content: space-between; height: 100%; background: #0f172a; color: #fff; text-align: center; }
+                            .back-logo-header { border-bottom: 2px solid #c9a84c; padding-bottom: 15px; }
+                            .rules-box { text-align: left; margin: 30px 0; font-size: 0.75rem; line-height: 1.6; color: #cbd5e1; }
+                            .rules-box ol { padding-left: 15px; margin: 10px 0; }
+                            .rules-box li { margin-bottom: 8px; }
+                            .barcode-placeholder { border-top: 1px solid #1e293b; padding-top: 15px; margin-top: auto; }
+                            .barcode-line-block { background: #fff; padding: 10px; border-radius: 4px; display: inline-block; width: 80%; }
+                            .barcode-mock { height: 35px; background: repeating-linear-gradient(90deg, #000, #000 2px, #fff 2px, #fff 6px); width: 100%; }
+                        </style>
+                    </head>
+                    <body>
+
+                        <div class="id-side">
+                            <div class="front-header">
+                                <div class="inst-title">Higher Education Institution</div>
+                                <div class="inst-tag">Campus Identity Module</div>
+                            </div>
+                            <div class="avatar-holder">
+                                <img src="${parsedImgSrc}" alt="Passport Photo">
+                            </div>
+                            <div class="front-content">
+                                <div class="s-name">${s.n}</div>
+                                <div class="s-track">${s.track}</div>
+                                <div class="details-grid">
+                                    <div class="data-row"><span>Student ID:</span><b style="color:var(--accent); font-weight:800;">${seedIdStr}</b></div>
+                                    <div class="data-row"><span>Email link:</span><b>${s.e}</b></div>
+                                    <div class="data-row"><span>Contact No:</span><b>${s.phone}</b></div>
+                                    <div class="data-row"><span>District:</span><b>${s.district}</b></div>
+                                </div>
+                            </div>
+                            <div class="front-footer">Academic Session 2026</div>
+                        </div>
+
+                        <div class="id-side">
+                            <div class="back-body">
+                                <div class="back-logo-header">
+                                    <div class="inst-title" style="font-size:1.1rem;">Campus Regulations</div>
+                                    <div style="font-size:0.6rem; text-transform:uppercase; color:#94a3b8; letter-spacing:1px; margin-top:2px;">Terms of Institutional Usage</div>
+                                </div>
+                                <div class="rules-box">
+                                    <p style="font-weight:700; color:var(--accent); text-transform:uppercase; margin-bottom:5px;">Instructions:</p>
+                                    <ol>
+                                        <li>This card is non-transferable and remains physical property of the institution corporate registry body.</li>
+                                        <li>Cardholders must prominently display this secure badge terminal layer at all times upon entering parameters.</li>
+                                        <li>Loss of this asset must be reported to the digital admissions desk immediately.</li>
+                                    </ol>
+                                    <p style="margin-top:20px; font-size:0.7rem; color:#94a3b8; text-align:center;">📍 Lahore, Pakistan | 📞 +92 312 3456789</p>
+                                </div>
+                                <div class="barcode-placeholder">
+                                    <div class="barcode-line-block">
+                                        <div class="barcode-mock"></div>
+                                        <div style="color:#0f172a; font-size:0.6rem; font-weight:700; margin-top:4px; letter-spacing:2px;">${seedIdStr}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>window.print();<\/script>
+                    </body>
+                    </html>
+                `);
+                win.document.close();
             }
         };
 
         const Admin = {
             key: "22334455",
             localData: [],
+            localComplaints: [],
 
             login: function() {
                 if(document.getElementById('passIn').value === this.key) Router.navigate('dash');
@@ -835,6 +1096,7 @@
 
             fetchData: async function() {
                 try {
+                    // Pull student admissions array log snapshots
                     const res = await fetch(DB_URL);
                     const data = await res.json();
                     this.localData = [];
@@ -842,6 +1104,12 @@
                     
                     const masterBox = document.getElementById('selectAllCheckbox');
                     if(masterBox) masterBox.checked = false;
+
+                    // Pull helpdesk tickets nodes arrays snapshot
+                    const compRes = await fetch(COMPLAINT_URL);
+                    const compData = await compRes.json();
+                    this.localComplaints = [];
+                    if(compData) { for(let id in compData) this.localComplaints.push({ id, ...compData[id] }); }
 
                     this.sync();
                 } catch(err) { console.log(err); }
@@ -876,6 +1144,7 @@
             },
 
             sync: function() {
+                // Render applications master log array table
                 const b = document.getElementById('dashBody');
                 b.innerHTML = this.localData.map((s, i) => {
                     const calcPct = (parseFloat(s.matObt) / parseFloat(s.matTotal) * 100) || 0;
@@ -901,6 +1170,21 @@
                         </td>
                     </tr>
                 `; }).join('');
+
+                // Render complaints helpdesk logs array data table
+                const compTableBody = document.getElementById('complainDashBody');
+                if(this.localComplaints.length === 0) {
+                    compTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#64748b;">No active grievances logged in database logs node.</td></tr>`;
+                } else {
+                    compTableBody.innerHTML = this.localComplaints.map(c => `
+                        <tr>
+                            <td><b>${c.name}</b><br><small>${c.email}</small></td>
+                            <td><span class="sub-badge" style="background:#fff2f2; color:var(--danger); border-color:var(--danger); font-weight:800;">${c.type}</span></td>
+                            <td><p style="max-width:350px; font-size:0.85rem; line-height:1.4; color:#334155; word-wrap:break-word;">${c.message}</p><br><small style="color:#94a3b8;">${c.timestamp || ''}</small></td>
+                            <td><button class="action-btn delete" onclick="Admin.dismissComplaintRecord('${c.id}')">Dismiss Ticket</button></td>
+                        </tr>
+                    `).join('');
+                }
             },
 
             openReviewModal: function(index) {
@@ -968,6 +1252,7 @@
             },
 
             closeReviewModal: function() {
+                document.getElementById('modalProfileContentBody').innerHTML = "";
                 document.getElementById('adminReviewModal').style.display = "none";
             },
 
@@ -995,6 +1280,15 @@
                     await fetch(deleteURL, { method: 'DELETE' });
                     this.fetchData();
                 } catch(err) { alert("Delete Error: Record remains in database."); }
+            },
+
+            dismissComplaintRecord: async function(id) {
+                if(!confirm("Are you sure you want to resolve and clear this grievance log token?")) return;
+                try {
+                    const targetURL = `https://online-portal-for-uni-project-default-rtdb.firebaseio.com/complaints/${id}.json`;
+                    await fetch(targetURL, { method: 'DELETE' });
+                    this.fetchData();
+                } catch(err) { alert("Error: Grievance token remains inside the system registry."); }
             },
 
             exportExcel: function() {
