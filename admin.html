@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrative Portal Access | System Registry</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f172a;
+            --secondary: #1e293b;
+            --accent: #c9a84c;
+            --bg-body: #f1f5f9;
+            --white: #ffffff;
+            --success: #10b981;
+            --danger: #ef4444;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Open Sans', sans-serif; background: var(--bg-body); color: var(--primary); overflow-x: hidden; }
+        
+        header {
+            background: var(--primary); 
+            padding: 0 5%; height: 80px; display: flex;
+            justify-content: space-between; align-items: center;
+            position: fixed; width: 100%; top: 0; z-index: 1000;
+            border-bottom: 3px solid var(--accent);
+        }
+
+        .portal-logo { font-family: Montserrat; font-weight: 800; color: var(--accent); cursor: pointer; font-size: 1.1rem; letter-spacing: 1.5px; text-transform: uppercase; }
+        .nav-links { display: flex; list-style: none; gap: 20px; align-items: center; }
+        .nav-links a { text-decoration: none; color: #f8fafc; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; transition: var(--transition); letter-spacing: 0.5px; }
+        .nav-links a:hover { color: var(--accent); }
+
+        .menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 5px; }
+        .menu-toggle span { display: block; width: 25px; height: 3px; background-color: var(--accent); transition: var(--transition); }
+
+        .page { display: none; padding: 120px 5% 60px; min-height: 100vh; animation: fadeIn 0.5s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .section-header { text-align: center; margin-bottom: 50px; }
+        .section-header h2 { font-weight: 800; font-size: 2.2rem; color: var(--primary); text-transform: uppercase; }
+        .section-header hr { width: 50px; height: 5px; background: var(--accent); border: none; margin: 15px auto; }
+
+        .table-container { overflow-x: auto; background: var(--white); border-radius: 4px; border: 1px solid #e2e8f0; margin-bottom: 30px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: var(--secondary); color: var(--white); padding: 20px; text-align: left; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+        td { padding: 18px; border-bottom: 1px solid #e2e8f0; font-size: 0.95rem; }
+        .sub-badge { background: #f8fafc; color: var(--secondary); padding: 5px 12px; border-radius: 4px; font-weight: 700; font-size: 0.7rem; margin-right: 5px; border: 1px solid #cbd5e1; display: inline-block; margin-top: 5px; }
+
+        .form-box { max-width: 600px; margin: 0 auto; background: var(--white); padding: 45px; border-radius: 4px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15); }
+        input { width: 100%; padding: 15px; margin: 15px 0; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.95rem; outline: none; background: #fcfcfc; font-family: inherit; }
+        input:focus { border-color: var(--accent); background: #fff; }
+
+        .btn { 
+            background: var(--primary); color: var(--white); border: none; 
+            padding: 18px; width: 100%; font-weight: 800; border-radius: 4px; 
+            cursor: pointer; text-transform: uppercase; transition: var(--transition); letter-spacing: 1px;
+        }
+        .btn:hover { background: var(--accent); color: var(--primary); }
+
+        .action-btn { padding: 8px 14px; border: none; border-radius: 4px; color: white; cursor: pointer; font-weight: 700; font-size: 0.75rem; margin-right: 5px; text-transform: uppercase; margin-top: 5px; }
+        .accept { background: var(--success); }
+        .decline { background: var(--secondary); }
+        .delete { background: var(--danger); }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(4px); z-index: 2000; display: none; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
+        .modal-card { background: var(--white); width: 100%; max-width: 800px; max-height: 90vh; border-radius: 4px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); overflow-y: auto; padding: 40px; border-top: 6px solid var(--accent); animation: modalIn 0.3s ease; }
+        @keyframes modalIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .modal-close-btn { background: var(--primary); color: #fff; padding: 12px 25px; border: none; border-radius: 4px; font-weight: 700; text-transform: uppercase; cursor: pointer; transition: var(--transition); margin-top: 20px; float: right; }
+        .modal-close-btn:hover { background: var(--accent); color: var(--primary); }
+        .doc-preview-link { display: inline-block; background: var(--secondary); color: var(--white); padding: 8px 12px; margin: 5px; border-radius: 4px; text-decoration: none; font-size: 0.8rem; font-weight: 700; transition: var(--transition); border: none; cursor: pointer; }
+        .doc-preview-link:hover { background: var(--accent); color: var(--primary); }
+
+        footer { background: var(--primary); color: #94a3b8; padding: 80px 5% 40px; text-align: center; border-top: 8px solid var(--accent); }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: left; margin-bottom: 40px; }
+
+        @media (max-width: 900px) {
+            .menu-toggle { display: flex; }
+            .nav-links { display: none; flex-direction: column; position: absolute; top: 80px; left: 0; width: 100%; background: var(--primary); padding: 20px; box-shadow: 0 10px 15px rgba(0,0,0,0.2); border-bottom: 2px solid var(--accent); gap: 15px; }
+            .nav-links.mobile-active { display: flex; }
+            .nav-links li { width: 100%; text-align: center; }
+            .nav-links a { display: block; padding: 10px 0; font-size: 0.9rem; }
+            .form-box { padding: 25px; }
+            .page { padding: 100px 4% 40px; }
+            .section-header h2 { font-size: 1.8rem; }
+            th, td { padding: 12px 10px; font-size: 0.85rem; }
+            #dash div[style*="display:flex"] { flex-direction: column; gap: 10px !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="portal-logo" onclick="window.location.href='index.html'">Higher Education Portal</div>
+        <button class="menu-toggle" onclick="MobileMenu.toggle()" aria-label="Toggle Navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <nav>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="programs.html">Academic Programs</a></li>
+                <li><a href="eligibility.html">Eligibility Check</a></li>
+                <li><a href="fee.html">Fee Structure</a></li>
+                <li><a href="campus.html">Student Life</a></li>
+                <li><a href="contact.html">Location</a></li>
+                <li><a href="register.html" style="color:var(--accent)">Register Now</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="login" class="page active">
+        <div class="form-box">
+            <h2 style="text-align:center;">Secure Gateway</h2>
+            <p style="text-align: center; color: #64748b; margin-bottom: 30px;">Administrative Access Only</p>
+            <input type="password" id="passIn" placeholder="Authorized Personnel PIN">
+            <button id="adminLoginBtn" class="btn" onclick="Admin.login()">Authorize Session</button>
+        </div>
+    </section>
+
+    <section id="dash" class="page">
+        <div class="section-header"><h2>Student Management System</h2><hr></div>
+        
+        <h3 style="margin-bottom:15px; color:var(--primary); font-family:Montserrat;">Active Admission Requests Registry</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 40px; padding: 20px 10px 20px 20px;"><input type="checkbox" id="selectAllCheckbox" onclick="Admin.toggleSelectAll(this)"></th>
+                        <th>Student & Personal Record</th>
+                        <th>Academic Metrics Profile</th>
+                        <th>Admission Status</th>
+                        <th>Governance Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="dashBody"></tbody>
+            </table>
+        </div>
+        <div style="margin-top:10px; margin-bottom:50px; display:flex; gap:15px; flex-wrap: wrap;">
+            <button class="btn" style="background:var(--accent); color:var(--primary); width: auto; padding: 14px 25px; font-size:0.85rem;" onclick="Admin.exportExcel()">Generate CSV Report</button>
+            <button class="btn" style="background:var(--danger); width: auto; padding: 14px 25px; font-size:0.85rem;" onclick="Admin.deleteMultipleRecords()">Delete Selected Applications</button>
+        </div>
+
+        <h3 style="margin-bottom:15px; color:var(--primary); font-family:Montserrat; border-top: 2px dashed #cbd5e1; padding-top:40px;">Received Support Desk Tickets & Grievances</h3>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sender Identification</th>
+                        <th>Ticket Type</th>
+                        <th>Detailed Context Summary</th>
+                        <th>Operational Action</th>
+                    </tr>
+                </thead>
+                <tbody id="complainDashBody"><tr><td colspan="4" style="text-align:center; color:#64748b;">Awaiting secure database synchronizations...</td></tr></tbody>
+            </table>
+        </div>
+        
+        <div style="margin-top:30px;">
+            <button class="btn" style="background:var(--secondary); width: auto; padding: 15px 30px;" onclick="window.location.href='index.html'">Terminate Session</button>
+        </div>
+    </section>
+
+    <div id="adminReviewModal" class="modal-overlay">
+        <div class="modal-card">
+            <h2 style="border-bottom: 3px solid var(--accent); padding-bottom: 10px; color: var(--primary);">Application Profile Review Console</h2>
+            <div id="modalProfileContentBody" style="margin-top: 20px; line-height: 1.8;"></div>
+            <button class="modal-close-btn" onclick="Admin.closeReviewModal()">Dismiss Panel</button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <h4 style="color:var(--accent); margin-bottom:20px;">About the Portal</h4>
+                <p style="font-size:0.85rem; line-height:1.8;">The centralized digital admission gateway is designed for the Spring 2026 intake, ensuring a seamless bridge between applicants and institutional governance.</p>
+            </div>
+            <div>
+                <h4 style="color:var(--accent); margin-bottom:20px;">Quick Links</h4>
+                <p style="margin-bottom:10px; font-size:0.85rem;"><a href="programs.html" style="color:inherit; text-decoration:none;">Academics</a></p>
+                <p style="margin-bottom:10px; font-size:0.85rem;"><a href="eligibility.html" style="color:inherit; text-decoration:none;">Eligibility</a></p>
+                <p style="margin-bottom:10px; font-size:0.85rem;"><a href="fee.html" style="color:inherit; text-decoration:none;">Financials</a></p>
+            </div>
+            <div>
+                <h4 style="color:var(--accent); margin-bottom:20px;">Campus Support</h4>
+                <p style="font-size:0.85rem;">📞 +92 312 3456789</p>
+                <p style="font-size:0.85rem; margin-top:10px;">📧 admissions@eduportal.com</p>
+            </div>
+        </div>
+        <hr style="opacity: 0.1; margin-bottom: 30px;">
+        <p>© 2026 Academic Admission System. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        const DB_URL = "https://online-portal-for-uni-project-default-rtdb.firebaseio.com/admissions.json";
+        const COMPLAINT_URL = "https://online-portal-for-uni-project-default-rtdb.firebaseio.com/complaints.json";
+
+        const MobileMenu = {
+            toggle: function() {
+                const navLinks = document.getElementById('navLinks');
+                navLinks.classList.toggle('mobile-active');
+            },
+            close: function() {
+                const navLinks = document.getElementById('navLinks');
+                navLinks.classList.remove('mobile-active');
+            }
+        };
+
+        const Router = {
+            navigate: function(id) {
+                MobileMenu.close();
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.getElementById(id).classList.add('active');
+                window.scrollTo(0,0);
+                if(id === 'dash') Admin.fetchData();
+            }
+        };
+
+        const Admin = {
+            key: "22334455",
+            localData: [],
+            localComplaints: [],
+
+            login: function() {
+                const adminBtn = document.getElementById('adminLoginBtn');
+                adminBtn.innerHTML = "Authorizing Session... 🔐";
+                adminBtn.disabled = true;
+
+                setTimeout(() => {
+                    if(document.getElementById('passIn').value === this.key) {
+                        Router.navigate('dash');
+                    } else {
+                        alert("Authentication Error: Invalid PIN.");
+                    }
+                    adminBtn.innerHTML = "Authorize Session";
+                    adminBtn.disabled = false;
+                }, 400);
+            },
+
+            fetchData: async function() {
+                try {
+                    const res = await fetch(DB_URL);
+                    const data = await res.json();
+                    this.localData = [];
+                    if(data) { for(let id in data) this.localData.push({ id, ...data[id] }); }
+                    
+                    const masterBox = document.getElementById('selectAllCheckbox');
+                    if(masterBox) masterBox.checked = false;
+
+                    const compRes = await fetch(COMPLAINT_URL);
+                    const compData = await compRes.json();
+                    this.localComplaints = [];
+                    if(compData) { for(let id in compData) this.localComplaints.push({ id, ...compData[id] }); }
+
+                    this.sync();
+                } catch(err) { console.log(err); }
+            },
+
+            toggleSelectAll: function(masterCheckbox) {
+                const subBoxes = document.querySelectorAll('.student-select-box');
+                subBoxes.forEach(box => box.checked = masterCheckbox.checked);
+            },
+
+            deleteMultipleRecords: async function() {
+                const selectedBoxes = document.querySelectorAll('.student-select-box:checked');
+                if(selectedBoxes.length === 0) return alert("Validation Error: No applications selected for bulk removal.");
+                
+                if(!confirm(`Security Warning: Are you sure you want to permanently delete these ${selectedBoxes.length} selected records?`)) return;
+
+                let failures = 0;
+                for(let box of selectedBoxes) {
+                    const id = box.getAttribute('data-id');
+                    try {
+                        const deleteURL = `https://online-portal-for-uni-project-default-rtdb.firebaseio.com/admissions/${id}.json`;
+                        await fetch(deleteURL, { method: 'DELETE' });
+                    } catch(err) {
+                        failures++;
+                    }
+                }
+
+                if(failures > 0) alert(`Bulk operation complete with errors. ${failures} logs could not be wiped.`);
+                else alert("All selected applications successfully deleted!");
+
+                this.fetchData();
+            },
+
+            sync: function() {
+                const b = document.getElementById('dashBody');
+                b.innerHTML = this.localData.map((s, i) => {
+                    const calcPct = (parseFloat(s.matObt) / parseFloat(s.matTotal) * 100) || 0;
+                    return `
+                    <tr>
+                        <td style="padding-left: 20px;"><input type="checkbox" class="student-select-box" data-id="${s.id}"></td>
+                        <td>
+                            <b style="font-size:1.05rem; color:var(--primary);">${s.n}</b><br>
+                            <small>📞 ${s.phone || 'N/A'}</small><br>
+                            <small>✉️ ${s.e}</small><br>
+                            <button class="action-btn decline" style="background:var(--primary); padding:4px 8px; font-size:0.7rem;" onclick="Admin.openReviewModal(${i})">Review Full Application</button>
+                        </td>
+                        <td>
+                            <span class="sub-badge">${s.track || 'N/A'}</span><br>
+                            <small>Board: ${s.boardName || 'N/A'} (Roll: ${s.rollNo || 'N/A'})</small><br>
+                            <small>Marks: <b>${s.matObt || 0} / ${s.matTotal || 0}</b> (${calcPct.toFixed(2)}%)</small><br>
+                            <small style="color:${s.feeStatus==='Paid'?'var(--success)':(s.feeStatus==='Awaiting Verification'?'#eab308':'var(--danger)')}; font-weight:700;">Fee Status: ${s.feeStatus || 'Unpaid'}</small>
+                        </td>
+                        <td style="color:${s.status==='Accepted'?'var(--success)':(s.status==='Rejected'?'var(--danger)':'#64748b')}; font-weight:800;">${s.status}</td>
+                        <td>
+                            <div style="display:flex; flex-direction:column; gap:2px;">
+                                <button class="action-btn accept" onclick="Admin.action('${s.id}', ${i}, 'Accepted')">Accept</button>
+                                <button class="action-btn accept" style="background:#0284c7;" onclick="Admin.approveFeePaidStatus('${s.id}', ${i})">Approve Fee</button>
+                                <button class="action-btn decline" onclick="Admin.action('${s.id}', ${i}, 'Rejected')">Reject</button>
+                                <button class="action-btn delete" onclick="Admin.deleteRecord('${s.id}')">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                `; }).join('');
+
+                const compTableBody = document.getElementById('complainDashBody');
+                if(this.localComplaints.length === 0) {
+                    compTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#64748b;">No active grievances logged in database logs node.</td></tr>`;
+                } else {
+                    compTableBody.innerHTML = this.localComplaints.map(c => `
+                        <tr>
+                            <td><b>${c.name}</b><br><small>${c.email}</small></td>
+                            <td><span class="sub-badge" style="background:#fff2f2; color:var(--danger); border-color:var(--danger); font-weight:800;">${c.type}</span></td>
+                            <td><p style="max-width:350px; font-size:0.85rem; line-height:1.4; color:#334155; word-wrap:break-word;">${c.message}</p><br><small style="color:#94a3b8;">${c.timestamp || ''}</small></td>
+                            <td><button class="action-btn delete" onclick="Admin.dismissComplaintRecord('${c.id}')">Dismiss Ticket</button></td>
+                        </tr>
+                    `).join('');
+                }
+            },
+
+            openReviewModal: function(index) {
+                const s = this.localData[index];
+                const pct = (parseFloat(s.matObt) / parseFloat(s.matTotal) * 100) || 0;
+                
+                let htmlContent = `
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; border-bottom:1px solid #cbd5e1; padding-bottom:15px;">
+                        <div>
+                            <h4 style="color:var(--accent);">Personal Details Profile</h4>
+                            <p><b>Name:</b> ${s.n}</p>
+                            <p><b>Email:</b> ${s.e}</p>
+                            <p><b>Father Name:</b> ${s.father || 'N/A'}</p>
+                            <p><b>DOB:</b> ${s.dob || 'N/A'}</p>
+                            <p><b>Gender:</b> ${s.gender || 'N/A'}</p>
+                            <p><b>Phone:</b> ${s.phone || 'N/A'}</p>
+                            <p><b>Religion:</b> ${s.religion || 'N/A'}</p>
+                            <p><b>Nationality:</b> ${s.nationality || 'N/A'}</p>
+                            <p><b>Address:</b> ${s.address || 'N/A'}, ${s.district || 'N/A'}</p>
+                        </div>
+                        <div>
+                            <h4 style="color:var(--accent);">Academic standing</h4>
+                            <p><b>Applied Degree:</b> ${s.track || 'N/A'}</p>
+                            <p><b>Board Authority:</b> ${s.boardName || 'N/A'}</p>
+                            <p><b>Roll Number:</b> ${s.rollNo || 'N/A'}</p>
+                            <p><b>Academic Score:</b> ${s.matObt || 0} / ${s.matTotal || 0}</p>
+                            <p><b>Calculated Percentage:</b> ${pct.toFixed(2)}%</p>
+                            <p><b>Submission Date:</b> ${s.date || '2026'}</p>
+                            <p><b>Current Status:</b> <b>${s.status}</b></p>
+                        </div>
+                    </div>
+                    <div style="margin-top:20px;">
+                        <h4 style="color:var(--accent); margin-bottom:10px;">Submitted Identity and Academic Evidence Packages</h4>
+                        <div style="display:flex; flex-wrap:wrap; gap:10px;">
+                            ${Admin.generateMockFilePreviewLink(s.doc1, "Matric DMC / Result Card")}
+                            ${Admin.generateMockFilePreviewLink(s.doc2, "Matric Certificate")}
+                            ${Admin.generateMockFilePreviewLink(s.doc3, "9th Result Card")}
+                            ${Admin.generateMockFilePreviewLink(s.doc4, "School Leaving Cert")}
+                            ${Admin.generateMockFilePreviewLink(s.doc5, "Student B-Form / CNIC")}
+                            ${Admin.generateMockFilePreviewLink(s.doc6, "Father CNIC Copy")}
+                            ${Admin.generateMockFilePreviewLink(s.doc7, "Passport Photo")}
+                        </div>
+                    </div>
+                `;
+                
+                document.getElementById('modalProfileContentBody').innerHTML = htmlContent;
+                document.getElementById('adminReviewModal').style.display = "flex";
+            },
+
+            generateMockFilePreviewLink: function(dataStr, label) {
+                if(!dataStr || dataStr === "Not Uploaded") {
+                    return `<span style="padding:8px; background:#e2e8f0; color:#94a3b8; border-radius:4px; font-size:0.8rem;">${label} (Missing)</span>`;
+                }
+                return `<button class="doc-preview-link" onclick="Admin.renderDocumentViewWindow(this)" data-src="${dataStr}">${label} 👁️</button>`;
+            },
+
+            renderDocumentViewWindow: function(btnElement) {
+                const dataStr = btnElement.getAttribute('data-src');
+                const win = window.open();
+                if(dataStr.startsWith("data:application/pdf")) {
+                    win.document.write(`<iframe src="${dataStr}" style="width:100%; height:100%; border:none;"></iframe>`);
+                } else {
+                    win.document.write(`<img src="${dataStr}" style="max-width:100%; height:auto; display:block; margin:20px auto; box-shadow:0 10px 15px rgba(0,0,0,0.15);"/>`);
+                }
+            },
+
+            closeReviewModal: function() {
+                document.getElementById('modalProfileContentBody').innerHTML = "";
+                document.getElementById('adminReviewModal').style.display = "none";
+            },
+
+            approveFeePaidStatus: async function(id, index) {
+                if(!confirm(`Verify payment package tracking status parameters for: ${this.localData[index].n}?`)) return;
+                try {
+                    const updateURL = `https://online-portal-for-uni-project-default-rtdb.firebaseio.com/admissions/${id}.json`;
+                    await fetch(updateURL, { method: 'PATCH', body: JSON.stringify({ feeStatus: "Paid" }) });
+                    this.localData[index].feeStatus = "Paid";
+                    alert("Fee Status updated successfully to Paid!");
+                    this.sync();
+                } catch(err) { alert("Failed to modify database collection values parameters."); }
+            },
+
+            action: async function(id, index, status) {
+                const student = this.localData[index];
+                try {
+                    const updateURL = `https://online-portal-for-uni-project-default-rtdb.firebaseio.com/admissions/${id}.json`;
+                    await fetch(updateURL, { method: 'PATCH', body: JSON.stringify({ status: status }) });
+                    student.status = status;
+                    this.sync();
+                    const sub = status === 'Accepted' ? "Admission Confirmation 2026" : "Admission Update 2026";
+                    const body = status === 'Accepted' ? `Dear ${student.n}, Your application has been approved. Welcome to the institution.` : `Dear ${student.n}, We regret to inform you that your application was unsuccessful.`;
+                    const choice = confirm("OK for Gmail Web, Cancel for Outlook Web");
+                    const url = choice 
+                        ? `https://mail.google.com/mail/?view=cm&fs=1&to=${student.e}&su=${encodeURIComponent(sub)}&body=${encodeURIComponent(body)}`
+                        : `https://outlook.office.com/mail/deeplink/compose?to=${student.e}&subject=${encodeURIComponent(sub)}&body=${encodeURIComponent(body)}`;
+                    window.open(url, '_blank');
+                } catch(err) { alert("Update Error: Failed to synchronize status."); }
+            },
+
+            deleteRecord: async function(id) {
+                if(!confirm("Security Warning: Are you sure you want to permanently erase this student record?")) return;
+                try {
+                    const deleteURL = `https://online-portal-for-uni-project-default-rtdb.firebaseio.com/admissions/${id}.json`;
+                    await fetch(deleteURL, { method: 'DELETE' });
+                    this.fetchData();
+                } catch(err) { alert("Delete Error: Record remains in database."); }
+            },
+
+            dismissComplaintRecord: async function(id) {
+                if(!confirm("Are you sure you want to resolve and clear this grievance log token?")) return;
+                try {
+                    const targetURL = `https://online-portal-for-uni-project-default-rtdb.firebaseio.com/complaints/${id}.json`;
+                    await fetch(targetURL, { method: 'DELETE' });
+                    this.fetchData();
+                } catch(err) { alert("Error: Grievance token remains inside the system registry."); }
+            },
+
+            exportExcel: function() {
+                let csv = "Student Name,Email,Father Name,DOB,Gender,Phone,Address,District/Province,Religion,Nationality,Applied Program,Board Name,Roll No,Matric Obtained,Matric Total,Admission Status\n" + 
+                    this.localData.map(s => `"${s.n}","${s.e}","${s.father || ''}","${s.dob || ''}","${s.gender || ''}","${s.phone || ''}","${s.address || ''}","${s.district || ''}","${s.religion || ''}","${s.nationality || ''}","${s.track || ''}","${s.boardName || ''}","${s.rollNo || ''}","${s.matObt || ''}","${s.matTotal || ''}","${s.status}"`).join("\n");
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a'); a.href = url; a.download = 'Master_Admission_Registry_2026.csv'; a.click();
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Departments | Admission Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f172a;
+            --secondary: #1e293b;
+            --accent: #c9a84c;
+            --bg-body: #f1f5f9;
+            --white: #ffffff;
+            --success: #10b981;
+            --danger: #ef4444;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Open Sans', sans-serif; background: var(--bg-body); color: var(--primary); overflow-x: hidden; }
+        
+        header {
+            background: var(--primary); 
+            padding: 0 5%; height: 80px; display: flex;
+            justify-content: space-between; align-items: center;
+            position: fixed; width: 100%; top: 0; z-index: 1000;
+            border-bottom: 3px solid var(--accent);
+        }
+
+        .portal-logo { font-family: Montserrat; font-weight: 800; color: var(--accent); cursor: pointer; font-size: 1.1rem; letter-spacing: 1.5px; text-transform: uppercase; }
+        .nav-links { display: flex; list-style: none; gap: 20px; align-items: center; }
+        .nav-links a { text-decoration: none; color: #f8fafc; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; transition: var(--transition); letter-spacing: 0.5px; }
+        .nav-links a:hover { color: var(--accent); }
+
+        .menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 5px; }
+        .menu-toggle span { display: block; width: 25px; height: 3px; background-color: var(--accent); transition: var(--transition); }
+
+        .page { display: none; padding: 120px 5% 60px; min-height: 100vh; animation: fadeIn 0.5s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .section-header { text-align: center; margin-bottom: 50px; }
+        .section-header h2 { font-weight: 800; font-size: 2.2rem; color: var(--primary); text-transform: uppercase; }
+        .section-header hr { width: 50px; height: 5px; background: var(--accent); border: none; margin: 15px auto; }
+
+        .table-container { overflow-x: auto; background: var(--white); border-radius: 4px; border: 1px solid #e2e8f0; margin-bottom: 30px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: var(--secondary); color: var(--white); padding: 20px; text-align: left; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+        td { padding: 18px; border-bottom: 1px solid #e2e8f0; font-size: 0.95rem; }
+        .sub-badge { background: #f8fafc; color: var(--secondary); padding: 5px 12px; border-radius: 4px; font-weight: 700; font-size: 0.7rem; margin-right: 5px; border: 1px solid #cbd5e1; display: inline-block; margin-top: 5px; }
+
+        footer { background: var(--primary); color: #94a3b8; padding: 80px 5% 40px; text-align: center; border-top: 8px solid var(--accent); }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: left; margin-bottom: 40px; }
+        .admin-link { color: var(--accent); font-size: 0.75rem; cursor: pointer; text-decoration: none; margin-top: 20px; display: inline-block; font-weight: 800; }
+
+        @media (max-width: 900px) {
+            .menu-toggle { display: flex; }
+            .nav-links { display: none; flex-direction: column; position: absolute; top: 80px; left: 0; width: 100%; background: var(--primary); padding: 20px; box-shadow: 0 10px 15px rgba(0,0,0,0.2); border-bottom: 2px solid var(--accent); gap: 15px; }
+            .nav-links.mobile-active { display: flex; }
+            .nav-links li { width: 100%; text-align: center; }
+            .nav-links a { display: block; padding: 10px 0; font-size: 0.9rem; }
+            .page { padding: 100px 4% 40px; }
+            .section-header h2 { font-size: 1.8rem; }
+            th, td { padding: 12px 10px; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="portal-logo" onclick="window.location.href='index.html'">Higher Education Portal</div>
+        <button class="menu-toggle" onclick="MobileMenu.toggle()" aria-label="Toggle Navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <nav>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="programs.html">Academic Programs</a></li>
+                <li><a href="eligibility.html">Eligibility Check</a></li>
+                <li><a href="fee.html">Fee Structure</a></li>
+                <li><a href="campus.html">Student Life</a></li>
+                <li><a href="contact.html">Location</a></li>
+                <li><a href="register.html" style="color:var(--accent)">Register Now</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="programs" class="page active">
+        <div class="section-header"><h2>Academic Departments</h2><hr></div>
+        <div class="table-container">
+            <table>
+                <thead><tr><th>Faculty</th><th>Description</th><th>Major Subjects</th></tr></thead>
+                <tbody>
+                    <tr><td><b>FSc Pre-Medical</b></td><td>Focused on clinical research and biological sciences.</td><td><span class="sub-badge">Physics</span><span class="sub-badge">Chemistry</span><span class="sub-badge">Biology</span></td></tr>
+                    <tr><td><b>FSc Pre-Engineering</b></td><td>A rigorous track for future architects and engineers.</td><td><span class="sub-badge">Physics</span><span class="sub-badge">Chemistry</span><span class="sub-badge">Mathematics</span></td></tr>
+                    <tr><td><b>ICS Computer Science</b></td><td>Software Engineering and AI-focused curriculum.</td><td><span class="sub-badge">Computing</span><span class="sub-badge">Math</span><span class="sub-badge">Physics</span></td></tr>
+                    <tr><td><b>FA / I.Com</b></td><td>Business, Commerce, and Humanities management.</td><td><span class="sub-badge">Accounting</span><span class="sub-badge">Economics</span><span class="sub-badge">Civics</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <h4 style="color:var(--accent); margin-bottom:20px;">About the Portal</h4>
+                <p style="font-size:0.85rem; line-height:1.8;">The centralized digital admission gateway is designed for the Spring 2026 intake, ensuring a seamless bridge between applicants and institutional governance.</p>
+            </div>
+            <div>
+                <h4 style="color:var(--accent); margin-bottom:20px;">Quick Links</h4>
+                <p style="margin-bottom:10px; font-size:0.85rem;"><a href="programs.html" style="color:inherit; text-decoration:none;">Academics</a></p>
+                <p style="margin-bottom:10px; font-size:0.85rem;"><a href="eligibility.html" style="color:inherit; text-decoration:none;">Eligibility</a></p>
+                <p style="margin-bottom:10px; font-size:0.85rem;"><a href="fee.html" style="color:inherit; text-decoration:none;">Financials</a></p>
+            </div>
+            <div>
+                <h4 style="color:var(--accent); margin-bottom:20px;">Campus Support</h4>
+                <p style="font-size:0.85rem;">📞 +92 312 3456789</p>
+                <p style="font-size:0.85rem; margin-top:10px;">📧 admissions@eduportal.com</p>
+            </div>
+        </div>
+        <hr style="opacity: 0.1; margin-bottom: 30px;">
+        <p>© 2026 Academic Admission System. All Rights Reserved.</p>
+        <span class="admin-link" onclick="window.location.href='admin.html'">Administrative Portal Access</span>
+    </footer>
+
+    <script>
+        const MobileMenu = {
+            toggle: function() {
+                const navLinks = document.getElementById('navLinks');
+                navLinks.classList.toggle('mobile-active');
+            }
+        };
+    </script>
+</body>
+</html>

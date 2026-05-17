@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration & Admission Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0f172a;
+            --secondary: #1e293b;
+            --accent: #c9a84c;
+            --bg-body: #f1f5f9;
+            --white: #ffffff;
+            --success: #10b981;
+            --danger: #ef4444;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Open Sans', sans-serif; background: var(--bg-body); color: var(--primary); overflow-x: hidden; }
+        
+        header {
+            background: var(--primary); 
+            padding: 0 5%; height: 80px; display: flex;
+            justify-content: space-between; align-items: center;
+            position: fixed; width: 100%; top: 0; z-index: 1000;
+            border-bottom: 3px solid var(--accent);
+        }
+
+        .portal-logo { font-family: Montserrat; font-weight: 800; color: var(--accent); cursor: pointer; font-size: 1.1rem; letter-spacing: 1.5px; text-transform: uppercase; }
+        .nav-links { display: flex; list-style: none; gap: 20px; align-items: center; }
+        .nav-links a { text-decoration: none; color: #f8fafc; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; transition: var(--transition); letter-spacing: 0.5px; }
+        .nav-links a:hover { color: var(--accent); }
+
+        .menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 5px; }
+        .menu-toggle span { display: block; width: 25px; height: 3px; background-color: var(--accent); transition: var(--transition); }
+
+        .page { display: none; padding: 120px 5% 60px; min-height: 100vh; animation: fadeIn 0.5s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .form-box { max-width: 600px; margin: 0 auto; background: var(--white); padding: 45px; border-radius: 4px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15); }
+        input, select, textarea { width: 100%; padding: 15px; margin: 15px 0; border: 1px solid #cbd5e1; border-radius: 4px; font-size: 0.95rem; outline: none; background: #fcfcfc; font-family: inherit; }
+        input:focus, select:focus, textarea:focus { border-color: var(--accent); background: #fff; }
+        label { font-weight: 700; font-size: 0.85rem; text-transform: uppercase; color: var(--secondary); letter-spacing: 0.5px; margin-top: 15px; display: block; }
+        
+        .form-heading-sub { color: var(--accent); font-weight: 800; font-size: 1rem; border-bottom: 2px solid #cbd5e1; padding-bottom: 5px; margin-top: 30px; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .btn { 
+            background: var(--primary); color: var(--white); border: none; 
+            padding: 18px; width: 100%; font-weight: 800; border-radius: 4px; 
+            cursor: pointer; text-transform: uppercase; transition: var(--transition); letter-spacing: 1px;
+        }
+        .btn:hover { background: var(--accent); color: var(--primary); }
+
+        footer { background: var(--primary); color: #94a3b8; padding: 80px 5% 40px; text-align: center; border-top: 8px solid var(--accent); }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; text-align: left; margin-bottom: 40px; }
+        .admin-link { color: var(--accent); font-size: 0.75rem; cursor: pointer; text-decoration: none; margin-top: 20px; display: inline-block; font-weight: 800; }
+
+        @media (max-width: 900px) {
+            .menu-toggle { display: flex; }
+            .nav-links { display: none; flex-direction: column; position: absolute; top: 80px; left: 0; width: 100%; background: var(--primary); padding: 20px; box-shadow: 0 10px 15px rgba(0,0,0,0.2); border-bottom: 2px solid var(--accent); gap: 15px; }
+            .nav-links.mobile-active { display: flex; }
+            .nav-links li { width: 100%; text-align: center; }
+            .nav-links a { display: block; padding: 10px 0; font-size: 0.9rem; }
+            .form-box { padding: 25px; }
+            .page { padding: 100px 4% 40px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="portal-logo" onclick="window.location.href='index.html'">Higher Education Portal</div>
+        <button class="menu-toggle" onclick="MobileMenu.toggle()" aria-label="Toggle Navigation">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <nav>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="programs.html">Academic Programs</a></li>
+                <li><a href="eligibility.html">Eligibility Check</a></li>
+                <li><a href="fee.html">Fee Structure</a></li>
+                <li><a href="campus.html">Student Life</a></li>
+                <li><a href="contact.html">Location</a></li>
+                <li><a href="register.html" style="color:var(--accent)">Register Now</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="studentsignup" class="page active">
+        <div class="form-box">
+            <h2 style="text-align:center;">Student Registration</h2>
+            <p style="text-align: center; color: #64748b; margin-bottom: 30px;">Create your account to apply</p>
+            <input type="text" id="regName" placeholder="Full Name">
+            <input type="email" id="regEmail" placeholder="Email Address">
+            <input type="password" id="regPass" placeholder="Choose Password">
+            <input type="password" id="regConfirmPass" placeholder="Confirm Password">
+            <button class="btn" onclick="Auth.signup()">Sign Up</button>
+            <p style="text-align: center; margin-top: 20px; font-size: 0.9rem; color: #475569;">Already have an account? <a href="#" onclick="Router.navigate('studentlogin')" style="color: var(--accent); font-weight: 700; text-decoration: none;">Log In Here</a></p>
+        </div>
+    </section>
+
+    <section id="studentlogin" class="page">
+        <div class="form-box">
+            <h2 style="text-align:center;">Student Gateway</h2>
+            <p style="text-align: center; color: #64748b; margin-bottom: 20px;">Log in to access the application form</p>
+            <input type="email" id="logEmail" placeholder="Email Address">
+            <input type="password" id="logPass" placeholder="Password">
+            <button id="studentLoginBtn" class="btn" onclick="Auth.login()">Log In</button>
+            <p style="text-align: center; margin-top: 20px; font-size: 0.9rem; color: #475569;"><a href="#" onclick="Router.navigate('forgotpassword')" style="color: var(--danger); text-decoration: none; font-weight: 600;">Forgot Password?</a></p>
+            <p style="text-align: center; margin-top: 15px; font-size: 0.9rem; color: #475569;">New applicant? <a href="#" onclick="Router.navigate('studentsignup')" style="color: var(--accent); font-weight: 700; text-decoration: none;">Create Account</a></p>
+        </div>
+    </section>
+
+    <section id="forgotpassword" class="page">
+        <div class="form-box">
+            <h2 style="text-align:center;">Reset Password Gateway</h2>
+            <p style="text-align: center; color: #64748b; margin-bottom: 25px;">Verify security fields to modify credentials</p>
+            
+            <div id="forgotVerificationBlock">
+                <input type="email" id="forgotEmail" placeholder="Registered Email Address">
+                <input type="text" id="forgotName" placeholder="Account Full Name">
+                <button class="btn" onclick="Auth.verifyForgotPasswordIdentity()">Verify Identity</button>
+            </div>
+
+            <div id="forgotResetInputBlock" style="display:none;">
+                <label style="margin-bottom:5px; display:block; color:var(--success);">Identity Matched! Set New Password Below:</label>
+                <input type="password" id="forgotNewPass" placeholder="Choose New Password">
+                <button class="btn" style="background:var(--success);" onclick="Auth.executePasswordOverrideUpdate()">Update Password</button>
+            </div>
+
+            <p style="text-align: center; margin-top: 25px; font-size: 0.9rem; color: #475569;">Remembered credentials? <a href="#" onclick="Router.navigate('studentlogin')" style="color: var(--accent); font-weight: 700; text-decoration: none;">Back to Login</a></p>
+        </div>
+    </section>
+
+    <section id="apply" class="page">
+        <div class="form-box" style="max-width:700px;">
+            <h2 style="text-align: center; margin-bottom: 5px;">College Admission Form</h2>
+            <p style="text-align: center; font-size: 0.85rem; color: #64748b; margin-bottom: 30px;">Please supply correct details to verify enrollment</p>
+            
+            <div id="applicationStatusBlock" style="display:none; text-align:center; margin-bottom:25px; padding:20px; background:#f8fafc; border-radius:4px; border:1px solid #e2e8f0;">
+                <h4 id="statusMessage" style="font-size:1.3rem; margin-bottom:5px; font-weight:800;"></h4>
+                
+                <div id="studentFeeStatusDisplay" style="font-weight:700; font-size:1rem; margin-bottom:15px; color:var(--secondary);"></div>
+
+                <div id="approvedActionsBlock" style="display:none; margin-top:15px; flex-direction:column; gap:10px;">
+                    <button id="voucherDownloadBtn" class="btn" style="background:var(--success); margin-bottom:10px; display:none;" onclick="Auth.generateFeeVoucherPDF()">Download Fee Voucher</button>
+                    
+                    <button id="confirmPaymentBtn" class="btn" style="background:#0284c7; margin-bottom:10px; display:none;" onclick="Auth.requestPaymentReviewConfirmation()">Confirm Payment (Submit for Review) 💳</button>
+                    
+                    <button id="studentIdCardDownloadBtn" class="btn" style="background:var(--accent); color:var(--primary); display:none;" onclick="Auth.generateStudentIDCardPDF()">Download Student ID Card</button>
+                </div>
+
+                <div id="appealActionBlock" style="display:none;">
+                    <button class="btn" style="background:var(--danger);" onclick="Auth.appealAdmission()">Appeal Admission (Apply Again)</button>
+                </div>
+            </div>
+
+            <div id="registrationInputsBlock">
+                <div class="form-heading-sub">Personal Details Required</div>
+
+                <label>Student Full Name</label>
+                <input type="text" id="formName" readonly>
+
+                <label>Email Address</label>
+                <input type="email" id="formEmail" readonly>
+
+                <label>Father/Guardian Name</label>
+                <input type="text" id="formFather" placeholder="Enter Father or Guardian full name">
+
+                <label>Date of Birth</label>
+                <input type="date" id="formDOB">
+
+                <label>Gender</label>
+                <select id="formGender">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <label>Mobile Number</label>
+                <input type="tel" id="formPhone" placeholder="e.g., 03XXXXXXXXX">
+
+                <label>Address</label>
+                <input type="text" id="formAddress" placeholder="Complete residential street address">
+
+                <label>District & Province</label>
+                <input type="text" id="formDistrict" placeholder="e.g., Okara, Punjab">
+
+                <label>Religion</label>
+                <input type="text" id="formReligion" placeholder="e.g., Islam, Christianity">
+
+                <label>Nationality</label>
+                <input type="text" id="formNationality" value="Pakistani">
+
+                <div class="form-heading-sub">Academic Standing Profile</div>
+
+                <label>Desired Academic Program Select</label>
+                <select id="formTrack" onchange="Auth.calculateRealtimeAcademicMetrics()">
+                    <option value="FSc Pre-Medical">FSc Pre-Medical (Req: 65%)</option>
+                    <option value="FSc Pre-Engineering">FSc Pre-Engineering (Req: 65%)</option>
+                    <option value="ICS Computer Science">ICS Computer Science (Req: 65%)</option>
+                    <option value="FA / I.Com">FA / I.Com (Req: 50%)</option>
+                </select>
+
+                <label>Educational Board Name</label>
+                <input type="text" id="formBoardName" placeholder="e.g. BISE Lahore">
+
+                <label>Board Roll Number (Matriculation)</label>
+                <input type="number" id="formRollNo" placeholder="Enter Matric Roll Number">
+
+                <label>Matric Total Marks</label>
+                <input type="number" id="formMatTotal" placeholder="e.g. 1100" oninput="Auth.calculateRealtimeAcademicMetrics()">
+
+                <label>Matric Obtained Marks</label>
+                <input type="number" id="formMatObt" placeholder="e.g. 850" oninput="Auth.calculateRealtimeAcademicMetrics()">
+
+                <div id="realtimeAdmissionMetricsFeedback" style="margin: 15px 0; padding: 15px; border-radius: 4px; background: #f8fafc; font-weight: 700; border: 1px solid #cbd5e1; font-size: 0.95rem;">
+                    Calculated Percentage: <span id="lblCalcPercent">0.00%</span><br>
+                    Eligibility Verification Status: <span id="lblEligibilityState">Awaiting Data...</span>
+                </div>
+
+                <div class="form-heading-sub">Required Documents Upload</div>
+                
+                <label>Matric Result Card / DMC</label>
+                <input type="file" id="docMatricDMC" accept="image/*,application/pdf" style="border:1px dashed #cbd5e1; padding:10px; background:#fff;">
+
+                <label>Matric Certificate (if issued)</label>
+                <input type="file" id="docMatricCert" accept="image/*,application/pdf" style="border:1px dashed #cbd5e1; padding:10px; background:#fff;">
+
+                <label>9th Class Result Card</label>
+                <input type="file" id="docNinthCard" accept="image/*,application/pdf" style="border:1px dashed #cbd5e1; padding:10px; background:#fff;">
+
+                <label>School Leaving Certificate</label>
+                <input type="file" id="docSchoolLeave" accept="image/*,application/pdf" style="border:1px dashed #cbd5e1; padding:10px; background:#fff;">
+
+                <label>Student B-Form or CNIC</label>
+                <input type="file" id="docStudentIdentity" accept="image/*,application/pdf" style="border:1px dashed #cbd5e1; padding:10px; background:#fff;">
+
+                <label>Father/Guardian CNIC copy</label>
+                <input type="file" id="docFatherCNIC" accept="image/*,application/pdf" style="border:1px dashed #cbd5e1; padding:10px; background:#fff;">
+
+                <label>Student Photo</label>
+                <input type="file" id="docPhoto" accept="image/*" style="border:1px dashed #cbd5e1; padding:10px; background:#fff;">
+
+                <button id="registerSubmitBtn" class="btn" style="margin-top:30px; background:var(--success);" onclick="Auth.submitFullAdmissionRequest()">Submit Complete Application</button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <h4 style="color:var(--accent); margin-bottom:20px;">About the Portal</h4>
+                <p style="font-size:0.85rem; line-height:1.8;">The centralized digital admission gateway is designed for the Spring 2026 intake, ensuring a seamless bridge between applicants and institutional governance.</p>
+            </div>
+            <div>
+                <h4 style="color:var(--accent); margin-bottom:20px;">Quick Links</h4>
+                <p style="margin-bottom:10px; font-size:0.85rem;"><a href="programs.html" style="color:inherit; text-decoration:none;">Academics</a></p>
+                <p style="margin-bottom:10px; font-size:0.85rem;"><a href="eligibility.html" style="color:inherit; text-decoration:none;">Eligibility</a></p>
+                <p style="margin-bottom:10px; font-size:0.85rem;"><a href="fee.html" style="color:inherit; text-decoration:none;">Financials</a></p>
+            </div>
+            <div>
+                <h4 style="color:var(--accent); margin-bottom:20px;">Campus Support</h4>
+                <p style="font-size:0.85rem;">📞 +92 312 3456789</p>
+                <p style="font-size:0.85rem; margin-top:10px;">📧 admissions@eduportal.com</p>
+            </div>
+        </div>
+        <hr style="opacity: 0.1; margin-bottom: 30px;">
+        <p>© 2026 Academic Admission System. All Rights Reserved.</p>
+        <span class="admin-link" onclick="window.location.href='admin.html'">Administrative Portal Access</span>
+    </footer>
+
+    <script>
+        const DB_URL = "https://online-portal-for-uni-project-default-rtdb.firebaseio.com/admissions.json";
+        const AUTH_URL = "https://online-portal-for-uni-project-default-rtdb.firebaseio.com/users.json";
+
+        const MobileMenu = {
+            toggle: function() {
+                const navLinks = document.getElementById('navLinks');
+                navLinks.classList.toggle('mobile-active');
+            },
+            close: function() {
+                const navLinks = document.getElementById('navLinks');
+                navLinks.classList.remove('mobile-active');
+            }
+        };
+
+        const Router = {
+            navigate: function(id) {
+                MobileMenu.close();
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                document.getElementById(id).classList.add('active');
+                window.scrollTo(0,0);
+                
+                if(id === 'forgotpassword') {
+                    document.getElementById('forgotEmail').value = "";
+                    document.getElementById('forgotName').value = "";
+                    document.getElementById('forgotNewPass').value = "";
+                    document.getElementById('forgotVerificationBlock').style.display = "block";
+                    document.getElementById('forgotResetInputBlock').style.display = "none";
+                    Auth.forgotValidatedUserId = null;
+                }
+            }
+        };
+
+        const Auth = {
+            currentApplicantRecordId: null,
+            forgotValidatedUserId: null,
+            activeApplicantDataSnapshot: null, 
+
+            signup: async function() {
+                const name = document.getElementById('regName').value.trim();
+                const email = document.getElementById('regEmail').value.trim();
+                const password = document.getElementById('regPass').value.trim();
+                const confirmPassword = document.getElementById('regConfirmPass').value.trim();
+
+                if(!name || !email || !password || !confirmPassword) return alert("Validation Error: All fields are required.");
+                if(password !== confirmPassword) return alert("Validation Error: Passwords do not match. Please verify.");
+
+                try {
+                    const res = await fetch(AUTH_URL);
+                    const users = await res.json();
+                    if(users) {
+                        for(let id in users) {
+                            if(users[id] && users[id].email && users[id].email.trim().toLowerCase() === email.toLowerCase()) {
+                                return alert("Error: An account with this email already exists.");
+                            }
+                        }
+                    }
+                    
+                    const userPayload = { name, email: email.toLowerCase(), password };
+                    await fetch(AUTH_URL, { method: 'POST', body: JSON.stringify(userPayload) });
+                    alert("Account created successfully! Please log in.");
+                    
+                    document.getElementById('regName').value = "";
+                    document.getElementById('regEmail').value = "";
+                    document.getElementById('regPass').value = "";
+                    document.getElementById('regConfirmPass').value = "";
+                    
+                    Router.navigate('studentlogin');
+                } catch(err) { alert("Connectivity Error: Authentication server offline."); }
+            },
+
+            login: async function() {
+                const email = document.getElementById('logEmail').value.trim().toLowerCase();
+                const password = document.getElementById('logPass').value.trim();
+                const loginBtn = document.getElementById('studentLoginBtn');
+
+                if(!email || !password) return alert("Validation Error: Please enter both email and password.");
+
+                loginBtn.innerHTML = "Logging in... ⏳";
+                loginBtn.disabled = true;
+
+                try {
+                    const res = await fetch(AUTH_URL);
+                    const users = await res.json();
+                    let matchedUser = null;
+
+                    if(users) {
+                        for(let id in users) {
+                            if(users[id] && users[id].email && users[id].email.trim().toLowerCase() === email && users[id].password === password) {
+                                matchedUser = users[id];
+                                break;
+                            }
+                        }
+                    }
+
+                    if(matchedUser) {
+                        document.getElementById('formName').value = matchedUser.name;
+                        document.getElementById('formEmail').value = matchedUser.email;
+                        
+                        document.getElementById('registrationInputsBlock').style.display = "block";
+                        document.getElementById('registerSubmitBtn').style.display = "block";
+                        document.getElementById('registerSubmitBtn').disabled = false;
+                        document.getElementById('applicationStatusBlock').style.display = "none";
+                        document.getElementById('approvedActionsBlock').style.display = "none";
+                        document.getElementById('voucherDownloadBtn').style.display = "none";
+                        document.getElementById('confirmPaymentBtn').style.display = "none";
+                        document.getElementById('studentIdCardDownloadBtn').style.display = "none";
+                        document.getElementById('appealActionBlock').style.display = "none";
+                        Auth.activeApplicantDataSnapshot = null;
+
+                        const admRes = await fetch(DB_URL);
+                        const admissions = await admRes.json();
+                        Auth.currentApplicantRecordId = null;
+
+                        if(admissions) {
+                            for(let id in admissions) {
+                                if(admissions[id] && admissions[id].e && admissions[id].e.trim().toLowerCase() === email) {
+                                    Auth.currentApplicantRecordId = id;
+                                    Auth.activeApplicantDataSnapshot = admissions[id];
+                                    const status = admissions[id].status;
+                                    const feeStatus = admissions[id].feeStatus || "Unpaid";
+                                    
+                                    document.getElementById('registerSubmitBtn').style.display = "none";
+                                    document.getElementById('registerSubmitBtn').disabled = true;
+                                    document.getElementById('registrationInputsBlock').style.display = "none";
+                                    document.getElementById('applicationStatusBlock').style.display = "block";
+                                    
+                                    const feeStatusDisplay = document.getElementById('studentFeeStatusDisplay');
+
+                                    if(status === "Pending") {
+                                        document.getElementById('statusMessage').innerHTML = "Status: Application In Review ⏳";
+                                        document.getElementById('statusMessage').style.color = "var(--secondary)";
+                                        feeStatusDisplay.innerHTML = "";
+                                    } else if(status === "Accepted") {
+                                        document.getElementById('statusMessage').innerHTML = "Status: Admission Approved ✅";
+                                        document.getElementById('statusMessage').style.color = "var(--success)";
+                                        document.getElementById('approvedActionsBlock').style.display = "flex";
+                                        document.getElementById('voucherDownloadBtn').style.display = "block";
+                                        
+                                        if (feeStatus === "Paid") {
+                                            feeStatusDisplay.innerHTML = "Fee Status: Paid ✅";
+                                            feeStatusDisplay.style.color = "var(--success)";
+                                            document.getElementById('confirmPaymentBtn').style.display = "none";
+                                            document.getElementById('studentIdCardDownloadBtn').style.display = "block";
+                                        } else if (feeStatus === "Awaiting Verification") {
+                                            feeStatusDisplay.innerHTML = "Fee Status: Verification In Progress ⏳";
+                                            feeStatusDisplay.style.color = "var(--secondary)";
+                                            document.getElementById('confirmPaymentBtn').style.display = "none";
+                                            document.getElementById('studentIdCardDownloadBtn').style.display = "none";
+                                        } else {
+                                            feeStatusDisplay.innerHTML = "Fee Status: Unpaid ❌";
+                                            feeStatusDisplay.style.color = "var(--danger)";
+                                            document.getElementById('confirmPaymentBtn').style.display = "block";
+                                            document.getElementById('studentIdCardDownloadBtn').style.display = "none";
+                                        }
+                                    } else if(status === "Rejected") {
+                                        document.getElementById('statusMessage').innerHTML = "Status: Admission Rejected ❌";
+                                        document.getElementById('statusMessage').style.color = "var(--danger)";
+                                        document.getElementById('appealActionBlock').style.display = "block";
+                                        feeStatusDisplay.innerHTML = "";
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        Router.navigate('apply');
+                    } else {
+                        alert("Authentication Error: Invalid email or password.");
+                    }
+                } catch(err) { 
+                    alert("Connectivity Error: Unable to verify credentials."); 
+                } finally {
+                    loginBtn.innerHTML = "Log In";
+                    loginBtn.disabled = false;
+                }
+            },
+
+            verifyForgotPasswordIdentity: async function() {
+                const email = document.getElementById('forgotEmail').value.trim().toLowerCase();
+                const name = document.getElementById('forgotName').value.trim().toLowerCase();
+
+                if(!email || !name) return alert("Validation Error: Please match both fields to proceed.");
+
+                try {
+                    const res = await fetch(AUTH_URL);
+                    const users = await res.json();
+                    let matchedId = null;
+
+                    if(users) {
+                        for(let id in users) {
+                            if(users[id] && users[id].email && users[id].name && 
+                               users[id].email.trim().toLowerCase() === email && 
+                               users[id].name.trim().toLowerCase() === name) {
+                                matchedId = id;
+                                break;
+                            }
+                        }
+                    }
+
+                    if(matchedId) {
+                        Auth.forgotValidatedUserId = matchedId;
+                        document.getElementById('forgotVerificationBlock').style.display = "none";
+                        document.getElementById('forgotResetInputBlock').style.display = "block";
+                    } else {
+                        alert("Verification Error: No account matches these provided tracking elements.");
+                    }
+                } catch(err) { alert("Connectivity Error: Server offline."); }
+            },
+
+            executePasswordOverrideUpdate: async function() {
+                const newPass = document.getElementById('forgotNewPass').value.trim();
+                if(!newPass) return alert("Validation Error: Password string field cannot be blank.");
+                if(!Auth.forgotValidatedUserId) return alert("Security Error: Identity session expired.");
+
+                try {
+                    const patchURL = `https://online-portal-for-uni-project-default-rtdb.firebaseio.com/users/${Auth.forgotValidatedUserId}.json`;
+                    await fetch(patchURL, { method: 'PATCH', body: JSON.stringify({ password: newPass }) });
+                    alert("Security update complete! Password updated successfully.");
+                    Router.navigate('studentlogin');
+                } catch(err) { alert("Connectivity Error: Failed to write update to database."); }
+            },
+
+            requestPaymentReviewConfirmation: async function() {
+                if(!Auth.currentApplicantRecordId) return;
+                try {
+                    const updateURL = `https://online-portal-for-uni-project-default-rtdb.firebaseio.com/admissions/${Auth.currentApplicantRecordId}.json`;
+                    await fetch(updateURL, { method: 'PATCH', body: JSON.stringify({ feeStatus: "Awaiting Verification" }) });
+                    alert("Payment status submitted for verification! Please check back shortly.");
+                    
+                    document.getElementById('confirmPaymentBtn').style.display = "none";
+                    const feeStatusDisplay = document.getElementById('studentFeeStatusDisplay');
+                    feeStatusDisplay.innerHTML = "Fee Status: Verification In Progress ⏳";
+                    feeStatusDisplay.style.color = "var(--secondary)";
+                } catch(err) { alert("Error sending payment validation token."); }
+            },
+
+            calculateRealtimeAcademicMetrics: function() {
+                const tot = parseFloat(document.getElementById('formMatTotal').value) || 0;
+                const obt = parseFloat(document.getElementById('formMatObt').value) || 0;
+                const track = document.getElementById('formTrack').value;
+                const lblPct = document.getElementById('lblCalcPercent');
+                const lblSts = document.getElementById('lblEligibilityState');
+
+                if(tot <= 0 || obt < 0 || obt > tot) {
+                    lblPct.innerHTML = "0.00%";
+                    lblSts.innerHTML = "Invalid Marks Range Provided";
+                    lblSts.style.color = "var(--danger)";
+                    return false;
+                }
+
+                const pct = (obt / tot) * 100;
+                lblPct.innerHTML = pct.toFixed(2) + "%";
+
+                let benchmark = (track === "FA / I.Com") ? 50 : 65;
+
+                if(pct >= benchmark) {
+                    lblSts.innerHTML = "ELIGIBLE FOR SELECTION ✅";
+                    lblSts.style.color = "var(--success)";
+                    return true;
+                } else {
+                    lblSts.innerHTML = `NOT ELIGIBLE (Requires Minimum ${benchmark}%) ❌`;
+                    lblSts.style.color = "var(--danger)";
+                    return false;
+                }
+            },
+
+            readDocumentAsDataURL: function(inputElementId) {
+                return new Promise((resolve) => {
+                    const field = document.getElementById(inputElementId);
+                    if (!field || !field.files || field.files.length === 0) return resolve("Not Uploaded");
+                    
+                    const file = field.files[0];
+                    if (file.type === "application/pdf") {
+                        const fileReader = new FileReader();
+                        fileReader.onload = function(e) { resolve(e.target.result); };
+                        fileReader.readAsDataURL(file);
+                        return;
+                    }
+
+                    const img = new Image();
+                    img.src = URL.createObjectURL(file);
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const MAX_WIDTH = 1000;
+                        const MAX_HEIGHT = 1000;
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > height) {
+                            if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                        } else {
+                            if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        ctx.drawImage(img, 0, 0, width, height);
+                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6);
+                        resolve(compressedBase64);
+                    };
+                });
+            },
+
+            submitFullAdmissionRequest: async function() {
+                const n = document.getElementById('formName').value;
+                const e = document.getElementById('formEmail').value.toLowerCase();
+                const father = document.getElementById('formFather').value.trim();
+                const dob = document.getElementById('formDOB').value;
+                const gender = document.getElementById('formGender').value;
+                const phone = document.getElementById('formPhone').value.trim();
+                const address = document.getElementById('formAddress').value.trim();
+                const district = document.getElementById('formDistrict').value.trim();
+                const religion = document.getElementById('formReligion').value.trim();
+                const nationality = document.getElementById('formNationality').value.trim();
+                
+                const track = document.getElementById('formTrack').value;
+                const boardName = document.getElementById('formBoardName').value.trim();
+                const rollNo = document.getElementById('formRollNo').value.trim();
+                const matTotal = document.getElementById('formMatTotal').value.trim();
+                const matObt = document.getElementById('formMatObt').value.trim();
+
+                if(!father || !dob || !phone || !address || !district || !religion || !nationality || !boardName || !rollNo || !matTotal || !matObt) {
+                    return alert("Validation Error: Please fill out all required form fields before submitting.");
+                }
+
+                const isAcademicEligible = Auth.calculateRealtimeAcademicMetrics();
+                if(!isAcademicEligible) {
+                    return alert("Admission Blocked: Your academic standing percentages do not meet criteria benchmarks.");
+                }
+
+                document.getElementById('registerSubmitBtn').innerHTML = "Optimizing and Uploading Packages... 🚀";
+                document.getElementById('registerSubmitBtn').disabled = true;
+
+                const baseMatricDMC = await Auth.readDocumentAsDataURL('docMatricDMC');
+                const baseMatricCert = await Auth.readDocumentAsDataURL('docMatricCert');
+                const baseNinthCard = await Auth.readDocumentAsDataURL('docNinthCard');
+                const baseSchoolLeave = await Auth.readDocumentAsDataURL('docSchoolLeave');
+                const baseStudentIdentity = await Auth.readDocumentAsDataURL('docStudentIdentity');
+                const baseFatherCNIC = await Auth.readDocumentAsDataURL('docFatherCNIC');
+                const basePhoto = await Auth.readDocumentAsDataURL('docPhoto');
+
+                const studentData = {
+                    n, e, father, dob, gender, phone, address, district, religion, nationality,
+                    track, boardName, rollNo, matTotal, matObt,
+                    doc1: baseMatricDMC, doc2: baseMatricCert, doc3: baseNinthCard, doc4: baseSchoolLeave,
+                    doc5: baseStudentIdentity, doc6: baseFatherCNIC, doc7: basePhoto,
+                    status: "Pending",
+                    feeStatus: "Unpaid", 
+                    date: new Date().toLocaleDateString()
+                };
+
+                try {
+                    await fetch(DB_URL, { method: 'POST', body: JSON.stringify(studentData) });
+                    
+                    document.getElementById('registrationInputsBlock').style.display = "none";
+                    document.getElementById('applicationStatusBlock').style.display = "block";
+                    document.getElementById('statusMessage').innerHTML = "Status: Application In Review ⏳";
+                    document.getElementById('statusMessage').style.color = "var(--secondary)";
+                    alert("Application package successfully locked and submitted!");
+                } catch(err) { 
+                    alert("Network Connection Error: Form submission failed."); 
+                } finally {
+                    document.getElementById('registerSubmitBtn').innerHTML = "Submit Complete Application";
+                    document.getElementById('registerSubmitBtn').disabled = false;
+                }
+            },
+
+            generateFeeVoucherPDF: function() {
+                const s = Auth.activeApplicantDataSnapshot;
+                if(!s) return alert("System Error: Profile cache records are empty.");
+
+                const isFSc = (s.track === "FSc Pre-Medical" || s.track === "FSc Pre-Engineering");
+                const totalFee = isFSc ? 55000 : 49000;
+                
+                let tuition = isFSc ? 42000 : 38000;
+                let exam = isFSc ? 5000 : 4000;
+                let reg = 5000;
+                let facilityLabel = isFSc ? "Laboratory" : "Library/IT";
+                let facilityFee = isFSc ? 3000 : 2000;
+
+                const issueDate = new Date().toLocaleDateString();
+                const voucherNo = "VCH-" + (s.rollNo || "2026") + "-" + Math.floor(100 + Math.random() * 900);
+
+                const renderSlipHTML = (slipTitle) => `
+                    <div class="slip">
+                        <div class="v-header">
+                            <div class="v-title">HEI ADMISSION PORTAL</div>
+                            <div style="font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:#c9a84c; font-weight:700; margin-top:2px;">${slipTitle}</div>
+                        </div>
+                        <div class="meta-row"><span>Voucher No:</span><b>${voucherNo}</b></div>
+                        <div class="meta-row"><span>Name:</span><b>${s.n}</b></div>
+                        <div class="meta-row"><span>Father Name:</span><b>${s.father}</b></div>
+                        <div class="meta-row"><span>Program Track:</span><b>${s.track}</b></div>
+                        <div class="meta-row"><span>Issue Date:</span><b>${issueDate}</b></div>
+                        
+                        <table>
+                            <thead>
+                                <tr><th>Component Description</th><th style="text-align:right;">Amount</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Tuition Fee Installment</td><td style="text-align:right;">${tuition.toLocaleString()}</td></tr>
+                                <tr><td>Exam Charges</td><td style="text-align:right;">${exam.toLocaleString()}</td></tr>
+                                <tr><td>Registration Secure Allocation</td><td style="text-align:right;">${reg.toLocaleString()}</td></tr>
+                                <tr><td>${facilityLabel} Institutional Fund</td><td style="text-align:right;">${facilityFee.toLocaleString()}</td></tr>
+                                <tr class="total-row"><td>TOTAL PAYABLE PKR</td><td style="text-align:right; color:#c9a84c;">${totalFee.toLocaleString()}</td></tr>
+                            </tbody>
+                        </table>
+                        <div class="sig-space">
+                            <div>Officer Signature</div>
+                            <div>Depositor Signature</div>
+                        </div>
+                    </div>
+                `;
+
+                const win = window.open("", "_blank");
+                win.document.write(`
+                    <html>
+                    <head>
+                        <title>Triplicate Fee Voucher - ${s.n}</title>
+                        <style>
+                            @page { size: A4 landscape; margin: 4mm 6mm; }
+                            body { font-family: 'Open Sans', sans-serif; color: #0f172a; margin: 0; padding: 0; background: #fff; }
+                            .voucher-container { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; width: 100%; box-sizing: border-box; }
+                            .slip { border: 1px dashed #0f172a; padding: 25px 15px; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; height: 96vh; }
+                            .v-header { text-align: center; border-bottom: 2px solid #c9a84c; padding-bottom: 6px; margin-bottom: 15px; }
+                            .v-title { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1rem; color: #0f172a; }
+                            .meta-row { display: flex; justify-content: space-between; font-size: 0.82rem; margin: 6px 0; border-bottom: 1px dotted #f1f5f9; padding-bottom:2px; }
+                            .meta-row span { color: #64748b; font-weight: 600; }
+                            table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.8rem; }
+                            th { background: #1e293b; color: #fff; padding: 6px 8px; text-align: left; text-transform: uppercase; font-size: 0.7rem; }
+                            td { padding: 8px 6px; border-bottom: 1px solid #e2e8f0; }
+                            .total-row { font-weight: 800; background: #f8fafc; font-size: 0.85rem; border-top: 2px solid #0f172a; }
+                            .sig-space { display: flex; justify-content: space-between; margin-top: auto; padding-top: 40px; font-size: 0.7rem; color: #64748b; text-align: center; }
+                            .sig-space div { border-top: 1px solid #cbd5e1; width: 45%; padding-top: 5px; }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="voucher-container">
+                            ${renderSlipHTML("Bank Copy")}
+                            ${renderSlipHTML("Campus Copy")}
+                            ${renderSlipHTML("Student Copy")}
+                        </div>
+                        <script>window.print();<\/script>
+                    </body>
+                    </html>
+                `);
+                win.document.close();
+            },
+
+            generateStudentIDCardPDF: function() {
+                const s = Auth.activeApplicantDataSnapshot;
+                if(!s) return alert("System Error: Profile cache records are empty.");
+
+                const seedIdStr = "HEI-2026-" + (s.rollNo || Math.floor(100000 + Math.random() * 900000));
+                const parsedImgSrc = (s.doc7 && s.doc7 !== "Not Uploaded") ? s.doc7 : "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='%2364748b'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>";
+
+                const win = window.open("", "_blank");
+                win.document.write(`
+                    <html>
+                    <head>
+                        <title>Student ID Card - ${s.n}</title>
+                        <style>
+                            @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Open+Sans:wght@400;600;700&display=swap');
+                            body { font-family: 'Open Sans', sans-serif; background: #fff; margin: 0; padding: 40px; display: flex; justify-content: center; gap: 40px; }
+                            
+                            .id-side { 
+                                width: 337.5px; height: 600px; 
+                                border-radius: 12px; overflow: hidden; 
+                                box-shadow: 0 15px 35px rgba(15, 23, 42, 0.2); 
+                                border: 2px solid #c9a84c; background: #fff; 
+                                display: flex; flex-direction: column; justify-content: space-between;
+                                position: relative;
+                            }
+                            
+                            .front-header { background: #0f172a; padding: 25px 15px 40px; text-align: center; border-bottom: 5px solid #c9a84c; clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%); }
+                            .inst-title { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.15rem; color: #c9a84c; text-transform: uppercase; letter-spacing: 1px; }
+                            .inst-tag { font-size: 0.65rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 2px; margin-top: 4px; }
+                            .avatar-holder { width: 120px; height: 120px; border-radius: 50%; border: 4px solid #c9a84c; margin: -60px auto 15px; overflow: hidden; background: #fff; box-shadow: 0 8px 16px rgba(0,0,0,0.15); z-index: 10; position: relative; }
+                            .avatar-holder img { width: 100%; height: 100%; object-fit: cover; }
+                            .front-content { text-align: center; padding: 0 25px; flex-grow: 1; }
+                            .s-name { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 1.35rem; color: #0f172a; text-transform: uppercase; margin-bottom: 4px; }
+                            .s-track { font-size: 0.85rem; font-weight: 700; color: #c9a84c; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 25px; }
+                            .details-grid { display: flex; flex-direction: column; gap: 10px; text-align: left; background: #f8fafc; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0; }
+                            .data-row { display: flex; justify-content: space-between; font-size: 0.8rem; border-bottom: 1px dashed #e2e8f0; padding-bottom: 4px; }
+                            .data-row span { font-weight: 700; color: #64748b; text-transform: uppercase; font-size: 0.7rem; width: 35%; }
+                            .data-row b { color: #0f172a; }
+                            .front-footer { background: #0f172a; padding: 12px; text-align: center; color: #94a3b8; font-size: 0.65rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+                            
+                            .back-body { padding: 40px 25px; display: flex; flex-direction: column; justify-content: space-between; height: 100%; background: #0f172a; color: #fff; text-align: center; }
+                            .back-logo-header { border-bottom: 2px solid #c9a84c; padding-bottom: 15px; }
+                            .rules-box { text-align: left; margin: 30px 0; font-size: 0.75rem; line-height: 1.6; color: #cbd5e1; }
+                            .rules-box ol { padding-left: 15px; margin: 10px 0; }
+                            .rules-box li { margin-bottom: 8px; }
+                            .barcode-placeholder { border-top: 1px solid #1e293b; padding-top: 15px; margin-top: auto; }
+                            .barcode-line-block { background: #fff; padding: 10px; border-radius: 4px; display: inline-block; width: 80%; }
+                            .barcode-mock { height: 35px; background: repeating-linear-gradient(90deg, #000, #000 2px, #fff 2px, #fff 6px); width: 100%; }
+                        </style>
+                    </head>
+                    <body>
+
+                        <div class="id-side">
+                            <div class="front-header">
+                                <div class="inst-title">Higher Education Institution</div>
+                                <div class="inst-tag">Campus Identity Module</div>
+                            </div>
+                            <div class="avatar-holder">
+                                <img src="${parsedImgSrc}" alt="Passport Photo">
+                            </div>
+                            <div class="front-content">
+                                <div class="s-name">${s.n}</div>
+                                <div class="s-track">${s.track}</div>
+                                <div class="details-grid">
+                                    <div class="data-row"><span>Student ID:</span><b style="color:var(--accent); font-weight:800;">${seedIdStr}</b></div>
+                                    <div class="data-row"><span>Email link:</span><b>${s.e}</b></div>
+                                    <div class="data-row"><span>Contact No:</span><b>${s.phone}</b></div>
+                                    <div class="data-row"><span>District:</span><b>${s.district}</b></div>
+                                </div>
+                            </div>
+                            <div class="front-footer">Academic Session 2026</div>
+                        </div>
+
+                        <div class="id-side">
+                            <div class="back-body">
+                                <div class="back-logo-header">
+                                    <div class="inst-title" style="font-size:1.1rem;">Campus Regulations</div>
+                                    <div style="font-size:0.6rem; text-transform:uppercase; color:#94a3b8; letter-spacing:1px; margin-top:2px;">Terms of Institutional Usage</div>
+                                </div>
+                                <div class="rules-box">
+                                    <p style="font-weight:700; color:var(--accent); text-transform:uppercase; margin-bottom:5px;">Instructions:</p>
+                                    <ol>
+                                        <li>This card is non-transferable and remains physical property of the institution corporate registry body.</li>
+                                        <li>Cardholders must prominently display this secure badge terminal layer at all times upon entering parameters.</li>
+                                        <li>Loss of this asset must be reported to the digital admissions desk immediately.</li>
+                                    </ol>
+                                    <p style="margin-top:20px; font-size:0.7rem; color:#94a3b8; text-align:center;">📍 Lahore, Pakistan | 📞 +92 312 3456789</p>
+                                </div>
+                                <div class="barcode-placeholder">
+                                    <div class="barcode-line-block">
+                                        <div class="barcode-mock"></div>
+                                        <div style="color:#0f172a; font-size:0.6rem; font-weight:700; margin-top:4px; letter-spacing:2px;">${seedIdStr}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>window.print();<\/script>
+                    </body>
+                    </html>
+                `);
+                win.document.close();
+            },
+            appealAdmission: function() {
+                document.getElementById('registrationInputsBlock').style.display = "block";
+                document.getElementById('registerSubmitBtn').style.display = "block";
+                document.getElementById('registerSubmitBtn').disabled = false;
+                document.getElementById('applicationStatusBlock').style.display = "none";
+            }
+        };
+    </script>
+</body>
+</html>
